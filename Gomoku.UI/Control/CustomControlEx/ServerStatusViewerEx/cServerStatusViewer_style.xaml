@@ -1,0 +1,93 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.ServerStatusViewerEx" 
+                    xmlns:pathbuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.PathButtonEx"
+                    xmlns:scrollviewerex="clr-namespace:Gomoku.UI.Control.CustomControlEx.ScrollViewerEx">
+
+    <local:cServerStatusViewer_converter_boolinverse x:Key="cServerStatusViewer_converter_boolinverse"/>
+    
+    <!--本体-->
+    <Style TargetType="{x:Type local:cServerStatusViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cServerStatusViewer}">
+                    <Border Padding="{TemplateBinding Margin}"
+                            IsHitTestVisible="{Binding ServerLock, Converter={StaticResource cServerStatusViewer_converter_boolinverse}}">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.ColumnSpan="4"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding BackgroundCornerRadius}"/>
+
+                            <TextBlock Grid.Column="0" 
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Margin="5,0,0,0">
+                                    <Run Text="IP:" Foreground="DarkGray"/>
+                            </TextBlock>
+
+                            <TextBox x:Name="inputbox" 
+                                     Grid.Column="1" 
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center" 
+                                     VerticalContentAlignment="Center"
+                                     Background="Transparent"
+                                     TextWrapping="NoWrap"
+                                     AcceptsReturn="False"
+                                     BorderThickness="0"
+                                     Foreground="White"
+                                     CaretBrush="OrangeRed"
+                                     Text="{Binding ServerAddress}"
+                                     Margin="0,0,5,0">
+                            </TextBox>
+
+                            <TextBlock Grid.Column="2" 
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,0,0">
+                                    <Run Text="Port:" Foreground="DarkGray"/>
+                                    <Run Text="{Binding ServerPort}" Foreground="White"/>
+                            </TextBlock>
+
+
+                            <pathbuttonex:cPathButton x:Name="pathbtn"
+                                                      Grid.Column="3"
+                                                      Width="{Binding ActualHeight,RelativeSource={RelativeSource Self}}" 
+                                                      Height="18"
+                                                      VerticalAlignment="Stretch"
+                                                      PathColor="LawnGreen"
+                                                      PathData="M512 960c-247.424 0-448-200.512-448-448s200.576-448 448-448c247.488 0 448 200.512 448 448s-200.512 448-448 448zM512 138.88v-0.256C297.92 138.688 138.88 306.304 138.88 512S306.304 885.12 512 885.12s373.12-167.36 373.12-373.12S717.76 138.88 512 138.88z m-66.048 554.816a26.88 26.88 0 0 1-30.336 0.832 35.456 35.456 0 0 1-15.424-29.952V321.984c0-12.416 5.888-23.872 15.424-29.952a26.88 26.88 0 0 1 30.4 0.896l238.912 171.328c8.64 6.272 13.952 17.28 13.952 29.056s-5.312 22.784-14.016 28.992l-238.912 171.392z"
+                                                      PathMargin="1"
+                                                      Command="{Binding CreateServerCommand}"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding ServerLock}" Value="False">
+                            <DataTrigger.Setters>
+                                <Setter Property="Background" Value="#A1000000" TargetName="inputbox"/>
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding ServerLock}" Value="True">
+                            <DataTrigger.Setters>
+                                <Setter Property="Opacity" Value="0.5" TargetName="pathbtn"/>
+                                <Setter Property="PathColor" Value="Red" TargetName="pathbtn"/>
+                                <Setter Property="PathData" Value="M512 960A392 392 0 0 1 400 192.448v119.168A279.872 279.872 0 0 0 512 848a280 280 0 0 0 280-280A280 280 0 0 0 624 311.616V192.448A391.872 391.872 0 0 1 512 960zM456 120a56 56 0 0 1 112 0v448h-112v-448z" 
+                                        TargetName="pathbtn"/>
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

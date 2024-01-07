@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ColorHelper" Version="1.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gomoku.Core\Gomoku.Core.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="Control\EffectEx\InvertedColorEffect\InvertedColorEffect.ps" />
+    <Resource Include="Control\EffectEx\TranslationalEffect\TranslationalEffect.ps" />
+    <Resource Include="Control\IconEx\01.png" />
+    <Resource Include="Control\IconEx\02.png" />
+    <Resource Include="Control\IconEx\03.png" />
+    <Resource Include="Control\IconEx\04.png" />
+    <Resource Include="Control\IconEx\05.png" />
+    <Resource Include="Control\IconEx\06.png" />
+    <Resource Include="Control\IconEx\07.png" />
+    <Resource Include="Control\IconEx\08.png" />
+    <Resource Include="Control\IconEx\09.png" />
+    <Resource Include="Control\IconEx\10.png" />
+    <Resource Include="Control\IconEx\11.png" />
+    <Resource Include="Control\IconEx\12.png" />
+    <Resource Include="Control\IconEx\13.png" />
+    <Resource Include="Control\IconEx\14.png" />
+    <Resource Include="Control\IconEx\15.png" />
+    <Resource Include="Control\IconEx\16.png" />
+    <Resource Include="Control\IconEx\17.png" />
+    <Resource Include="Control\IconEx\18.png" />
+    <Resource Include="Control\IconEx\19.png" />
+    <Resource Include="Control\IconEx\20.png" />
+    <Resource Include="Control\IconEx\21.png" />
+    <Resource Include="Control\IconEx\22.png" />
+    <Resource Include="Control\IconEx\23.png" />
+    <Resource Include="Control\IconEx\24.png" />
+    <Resource Include="Control\IconEx\25.png" />
+    <Resource Include="Control\IconEx\26.png" />
+    <Resource Include="Control\IconEx\27.png" />
+    <Resource Include="Control\IconEx\28.png" />
+    <Resource Include="Control\IconEx\29.png" />
+    <Resource Include="Control\IconEx\30.png" />
+    <Resource Include="Control\IconEx\31.png" />
+    <Resource Include="Control\IconEx\32.png" />
+    <Resource Include="Control\IconEx\33.png" />
+    <Resource Include="Control\IconEx\34.png" />
+    <Resource Include="Control\IconEx\35.png" />
+    <Resource Include="Control\IconEx\36.png" />
+    <Resource Include="Control\IconEx\37.png" />
+    <Resource Include="Control\IconEx\38.png" />
+    <Resource Include="Control\IconEx\39.png" />
+    <Resource Include="Control\IconEx\40.png" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Control\UserControlEx\ClientEx\uClient.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

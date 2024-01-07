@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="Gomoku.UI.Control.UserControlEx.TitleBarEx.uTitleBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gomoku.UI.Control.UserControlEx.TitleBarEx" 
+             xmlns:titlebarbuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.TitleBarButtonEx"
+             mc:Ignorable="d" 
+             MinWidth="240"
+             d:MinWidth="240"
+             d:MinHeight="25">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <DoubleCollection x:Key = "double_def">15 11.5</DoubleCollection>
+            <SolidColorBrush x:Key="AreaColor" Color="#862E2F34"/>
+            <Geometry x:Key="Gomoku">
+                M864.019692 64H160.019692a95.980308 95.980308 0 0 0-96.019692 96.019692v704a95.980308 95.980308 0 0 0 96.019692 95.980308h704a96.019692 96.019692 0 0 0 95.980308-96.019692V160.019692a96.019692 96.019692 0 0 0-96.019692-95.980307z m31.980308 96.019692v192h-224.019692V128h192a31.980308 31.980308 0 0 1 32.019692 32.019692z m-115.830154 448a143.990154 143.990154 0 0 0-108.189538-108.189538v-83.849846h224.019692v192.039384h-115.830154zM260.489846 415.940923a128 128 0 0 0 91.529846 91.529846v100.509539H128v-192.039385h132.489846z m247.020308-63.960615a127.960615 127.960615 0 0 0-91.490462-91.529846V128h191.960616v224.019692h-100.43077z m-91.490462 155.490461a127.921231 127.921231 0 0 0 91.490462-91.490461h100.509538v83.810461a144.029538 144.029538 0 0 0-108.189538 108.150154h-83.849846v-100.430769z m83.810462 164.509539a144.029538 144.029538 0 0 0 108.150154 108.150154v115.830153h-191.960616v-224.019692h83.810462z m140.169846 47.970461a79.990154 79.990154 0 1 1 0-159.980307 79.990154 79.990154 0 0 1 0 159.980307zM159.980308 128h192v132.489846a128 128 0 0 0-91.490462 91.529846H128V159.940923a31.980308 31.980308 0 0 1 32.019692-31.980308zM128 864.019692v-192h224.019692v223.980308H159.940923a31.980308 31.980308 0 0 1-31.980308-32.019692z m736.019692 31.980308h-192v-115.830154a143.990154 143.990154 0 0 0 108.150154-108.189538h115.830154v192a31.980308 31.980308 0 0 1-32.019692 32.019692z
+            </Geometry>
+            <VisualBrush x:Key="StripeTexture" TileMode="Tile" Viewport="0,0,3,3" ViewportUnits="Absolute" Viewbox="0,0,15,15" ViewboxUnits="Absolute">
+                <VisualBrush.Visual>
+                    <Grid Background="Transparent" RenderTransformOrigin="0.5,0.5">
+                        <Path Data="M 0,15 L 15,0" Stroke="White" StrokeThickness="5" Opacity="0.4" />
+                        <Path Data="M 15,15 L 30,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                        <Path Data="M 15,-15 L 0,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                        <Path Data="M 0,30 L 15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                        <Path Data="M 0,0 L -15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                    </Grid>
+                </VisualBrush.Visual>
+            </VisualBrush>
+
+            <local:uTitleBar_converter_bool2opacity x:Key="uTitleBar_converter_bool2opacity"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!--底板/防止完全穿透-->
+        <Rectangle x:Name="ChromeRect" Opacity="1" Fill="{StaticResource AreaColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                   Grid.Column="0" Grid.ColumnSpan="2"/>
+        <Rectangle Opacity=".2" Fill="{StaticResource StripeTexture}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                   Grid.Column="0" Grid.ColumnSpan="2"/>
+
+        <!--靠左-->
+        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Stretch" >
+            <titlebarbuttonex:cTitleBarButton x:Name="IconBtn" Type="EmptyBtn" Height="25" Width="25" Margin="1,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Border Width="20" Height="20"
+                        Background="snow" 
+                        CornerRadius="2.5"
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center">
+                    <Path Data="{StaticResource Gomoku}" 
+                          Fill="#1B1B1B"
+                          Stretch="Uniform" 
+                          Width="18"
+                          Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+                </Border>
+            </titlebarbuttonex:cTitleBarButton>
+            <TextBlock TextWrapping="Wrap" d:IsHidden="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,4,0"
+                       Text="{Binding Title, 
+                                      RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},
+                                      FallbackValue=Title}"
+                       Foreground="Snow"
+                       Opacity="{Binding IsActive, 
+                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},
+                                         Converter={StaticResource uTitleBar_converter_bool2opacity}}"/>
+        </StackPanel>
+
+        <!--靠右-->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0" HorizontalAlignment="Right">
+            <titlebarbuttonex:cTitleBarButton x:Name="ResetPosBtn" Type="MaxMinBtn" Width="30" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Click="ResetPosButton_Click"
+                                              IsActive="{Binding IsActive, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}">
+                <Path Data="M838.695 374.154A354.62 354.62 0 0 0 512 157.538a354.462 354.462 0 1 0 0 708.924A354.58 354.58 0 0 0 842.161 641.26a39.385 39.385 0 1 1 73.334 28.751A433.31 433.31 0 0 1 512 945.231C272.738 945.23 78.77 751.26 78.77 512S272.737 78.77 512 78.77c144.423 0 275.14 71.285 354.462 183.965V177.23a39.385 39.385 0 0 1 78.769 0v236.307a39.266 39.266 0 0 1-39.385 39.385H708.923a39.385 39.385 0 0 1 0-78.77h129.772z"
+                      Fill="{Binding Foreground, ElementName=CloseBtn}"
+                      Margin="0" 
+                      Stretch="Fill" 
+                      Width="{Binding [1], Source={StaticResource double_def}}"
+                      Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </titlebarbuttonex:cTitleBarButton>
+            <titlebarbuttonex:cTitleBarButton x:Name="MinimizeBtn" Type="MaxMinBtn" Width="30" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Click="MinimizeButton_Click" IsEnabled="False"
+                                              IsActive="{Binding IsActive, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}">
+                <Path Data="M984.615385 955.076923c0 15.753846-13.784615 29.538462-29.538462 29.538462h-886.153846c-15.753846 0-29.538462-13.784615-29.538462-29.538462v-59.076923c0-15.753846 13.784615-29.538462 29.538462-29.538462h886.153846c15.753846 0 29.538462 13.784615 29.538462 29.538462v59.076923z"
+                      Fill="{Binding Foreground, ElementName=CloseBtn}"
+                      Margin="0,9,0,0"
+                      Stretch="Fill"
+                      Width="{Binding [1], Source={StaticResource double_def}}"
+                      Height="1"/>
+            </titlebarbuttonex:cTitleBarButton>
+            <titlebarbuttonex:cTitleBarButton x:Name="MaximizeBtn" Type="MaxMinBtn" Width="30" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Click="MaximizeButton_Click" IsEnabled="False"
+                                              IsActive="{Binding IsActive, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}">
+                <Path Data="M915.995 960.219H110.228c-24.262 0-44-19.738-44-44V110.228c0-24.262 19.738-44 44-44h805.768c24.262 0 44 19.738 44 44v805.991c-0.001 24.261-19.739 44-44.001 44z m-785.767-64h765.768V130.228H130.228v765.991z
+                            M124.462 128.688h803.533v64H124.462z"
+                      Fill="{Binding Foreground, ElementName=CloseBtn}"
+                      Margin="0"
+                      Stretch="Fill"
+                      Width="{Binding [1], Source={StaticResource double_def}}"
+                      Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </titlebarbuttonex:cTitleBarButton>
+            <titlebarbuttonex:cTitleBarButton x:Name="CloseBtn" Type="CloseBtn" Width="30" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Click="CloseButton_Click"
+                                              IsActive="{Binding IsActive, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                                              Foreground="#FFDCDFE1" >
+                <Path Data="M571.733333 512l268.8-268.8c17.066667-17.066667 17.066667-42.666667 0-59.733333-17.066667-17.066667-42.666667-17.066667-59.733333 0L512 452.266667 243.2 183.466667c-17.066667-17.066667-42.666667-17.066667-59.733333 0-17.066667 17.066667-17.066667 42.666667 0 59.733333L452.266667 512 183.466667 780.8c-17.066667 17.066667-17.066667 42.666667 0 59.733333 8.533333 8.533333 19.2 12.8 29.866666 12.8s21.333333-4.266667 29.866667-12.8L512 571.733333l268.8 268.8c8.533333 8.533333 19.2 12.8 29.866667 12.8s21.333333-4.266667 29.866666-12.8c17.066667-17.066667 17.066667-42.666667 0-59.733333L571.733333 512z"
+                      Fill="{Binding Foreground, ElementName=CloseBtn}"
+                      Margin="0" 
+                      Stretch="Fill" 
+                      Width="{Binding [1], Source={StaticResource double_def}}"
+                      Height="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+            </titlebarbuttonex:cTitleBarButton>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,98 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.ChessBoardEx"
+                    xmlns:attached="clr-namespace:Gomoku.Core.Helper.AttachedProperty;assembly=Gomoku.Core" 
+                    xmlns:stonebuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.StoneButtonEx">
+
+    <local:cChessBoard_converter_boardsize2weekpointmargin x:Key="cChessBoard_converter_boardsize2weekpointmargin"/>
+    <local:cChessBoard_converter_weekpointmargin2margin x:Key="cChessBoard_converter_weekpointmargin2margin"/>
+    
+    <Style TargetType="{x:Type local:cChessBoard}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cChessBoard}">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <!--背景-->
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    CornerRadius="{TemplateBinding ChessBoardCornerRadius}"/>
+
+                            <!--网格-->
+                            <Border Background="{Binding BackgroundBrush}"
+                                    Width="{Binding ChessBoardSize.X}"
+                                    Height="{Binding ChessBoardSize.Y}"
+                                    CornerRadius="5"
+                                    attached:UIElementHelper.MouseLeftButtonDownAttached="True"
+                                    attached:UIElementHelper.MouseLeftButtonDownCommand="{Binding MouseClickCommand}"
+                                    attached:UIElementHelper.MouseMoveAttached="True"
+                                    attached:UIElementHelper.MouseMoveCommand="{Binding MouseMoveCommand}">
+                            </Border>
+
+                            <!--五个点-->
+                            <Ellipse Width="5" Height="5" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"
+                                     Margin="0"/>
+                            <Ellipse x:Name="ellipseTopLeft"
+                                     Width="5" Height="5" Fill="Black" HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False">
+                                <Ellipse.Margin>
+                                    <MultiBinding Converter="{StaticResource cChessBoard_converter_boardsize2weekpointmargin}"
+                                                  ConverterParameter="0">
+                                        <Binding Path="Width" RelativeSource="{RelativeSource Self}"/>
+                                        <Binding Path="GridSize"/>
+                                        <Binding Path="HorizontalGridCount"/>
+                                        <Binding Path="VerticalGridCount"/>
+                                    </MultiBinding>
+                                </Ellipse.Margin>
+                            </Ellipse>
+                            <Ellipse x:Name="ellipseTopRight"
+                                     Width="5" Height="5" Fill="Black" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False"
+                                     Margin="{Binding Margin, ElementName=ellipseTopLeft, Converter={StaticResource cChessBoard_converter_weekpointmargin2margin}}"/>
+                            <Ellipse x:Name="ellipseBottomRight" Width="5" Height="5" Fill="Black" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsHitTestVisible="False"
+                                     Margin="{Binding Margin, ElementName=ellipseTopRight, Converter={StaticResource cChessBoard_converter_weekpointmargin2margin}}"/>
+                            <Ellipse Width="5" Height="5" Fill="Black" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsHitTestVisible="False"
+                                     Margin="{Binding Margin, ElementName=ellipseBottomRight, Converter={StaticResource cChessBoard_converter_weekpointmargin2margin}}"/>
+
+                            <!--棋子容器-->
+                            <ItemsControl ItemsSource="{Binding StoneVMList}"
+                                          Background="DarkGray" 
+                                          IsHitTestVisible="False">
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <Border>
+                                            <Grid IsItemsHost="True"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <!-- 这里定义每个项的样式 -->
+                                        <stonebuttonex:cStoneButton Type="{Binding Type}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                                    Diameter="{Binding Diameter}"
+                                                                    Margin="{Binding Margin}"
+                                                                    EnableHighLight="{Binding EnableHighLight}"
+                                                                    Visibility="{Binding Visibility}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!--棋子落点预览-->
+                            <stonebuttonex:cStoneButton Type="{Binding TempStoneVM.Type}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                        Diameter="{Binding TempStoneVM.Diameter}"
+                                                        Margin="{Binding TempStoneVM.Margin}"
+                                                        Visibility="{Binding TempStoneVM.Visibility}"
+                                                        IsHitTestVisible="False"/>
+
+                            <!--收边-->
+                            <Border BorderBrush="#3F4B57" 
+                                    BorderThickness="1"
+                                    CornerRadius="{TemplateBinding ChessBoardCornerRadius}"
+                                    Margin="-0.5"
+                                    IsHitTestVisible="False"/>
+                        </Grid>
+                        
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

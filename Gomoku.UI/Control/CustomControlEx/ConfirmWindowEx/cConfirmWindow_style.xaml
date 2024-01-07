@@ -1,0 +1,114 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.ConfirmWindowEx" 
+                    xmlns:pathbuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.PathButtonEx">
+
+    <Style TargetType="{x:Type local:cConfirmWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cConfirmWindow}">
+                    <Border Padding="{TemplateBinding Margin}"
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding BorderCornerRadius}">
+
+                        <Grid HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!--IP-->
+                            <TextBlock Grid.Column="0" Grid.Row="0"
+                                       Text="{TemplateBinding FirstName}"
+                                       Foreground="White"/>
+                            <StackPanel Grid.Column="1" Grid.Row="0"
+                                        Orientation="Horizontal"
+                                        Margin="5,0,0,0">
+                                <TextBlock Text=": " Foreground="White"/>
+
+                                <TextBox MinWidth="80" 
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Center" 
+                                         VerticalContentAlignment="Center"
+                                         Background="#70000000"
+                                         TextWrapping="NoWrap"
+                                         AcceptsReturn="False"
+                                         BorderThickness="0"
+                                         Foreground="White"
+                                         CaretBrush="OrangeRed"
+                                         Text="{Binding FirstValue, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding ConfirmCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Key="Return"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                            </StackPanel>
+
+                            <!--Port-->
+                            <TextBlock Grid.Column="0" Grid.Row="1"
+                                       Text="{TemplateBinding SecondName}"
+                                       Foreground="White"
+                                       Margin="0,2,0,0"/>
+                            <StackPanel Grid.Column="1" Grid.Row="1"
+                                        Orientation="Horizontal"
+                                        Margin="5,2,0,0">
+                                <TextBlock Text=": " Foreground="White"/>
+
+                                <TextBox MinWidth="80" 
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Center" 
+                                         VerticalContentAlignment="Center"
+                                         Background="#70000000"
+                                         TextWrapping="NoWrap"
+                                         AcceptsReturn="False"
+                                         BorderThickness="0"
+                                         Foreground="White"
+                                         CaretBrush="OrangeRed"
+                                         Text="{Binding SecondValue, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding ConfirmCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Key="Return"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                            </StackPanel>
+
+                            <!--确认、取消-->
+                            <StackPanel Grid.ColumnSpan="2" Grid.Row="3" 
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Margin="0,5,0,0">
+                                
+                                <pathbuttonex:cPathButton Height="24"
+                                                          Text="Login"
+                                                          TextColor="LawnGreen"
+                                                          PathData="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z"
+                                                          PathColor="LightGray"
+                                                          Margin="0"
+                                                          Command="{TemplateBinding ConfirmCommand}"/>
+                                <pathbuttonex:cPathButton Height="24"
+                                                          Text="Exit"
+                                                          TextColor="Red"
+                                                          PathData="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z"
+                                                          PathColor="LightGray"
+                                                          Margin="5,0,0,0"
+                                                          Command="{TemplateBinding CancelCommand}"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

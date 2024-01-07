@@ -1,0 +1,667 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.ChatHistoryViewerEx"
+                    xmlns:attached="clr-namespace:Gomoku.Core.Helper.AttachedProperty;assembly=Gomoku.Core"
+                    xmlns:scrollviewerex="clr-namespace:Gomoku.UI.Control.CustomControlEx.ScrollViewerEx" 
+                    xmlns:pathbuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.PathButtonEx" 
+                    xmlns:colorfultextblockex="clr-namespace:Gomoku.UI.Control.CustomControlEx.ColorfulTextBlockEx">
+
+    <local:cChatHistoryViewer_converter_imagesource x:Key="cChatHistoryViewer_converter_imagesource"/>
+    <local:cChatHistoryViewer_converter_textblock_textlimit x:Key="cChatHistoryViewer_converter_textblock_textlimit"/>
+    <local:cChatHistoryViewer_converter_solidcolorbrush2color x:Key="cChatHistoryViewer_converter_solidcolorbrush2color"/>
+    <local:cChatHistoryViewer_converter_textblock_maxwidth x:Key="cChatHistoryViewer_converter_textblock_maxwidth"/>
+
+    <!--FontSizs: 用户名、说话内容、系统消息、对战消息-->
+    <DoubleCollection x:Key = "doubleCollection">12 11 10 11</DoubleCollection>
+    
+    <!--通用contentGrid淡入动画-->
+    <Storyboard x:Key="FadeInAnimation">
+        <!--不透明度-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+                                       AutoReverse="False"
+                                       FillBehavior="Stop"
+                                       Duration="0:1:0">
+            <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+        </DoubleAnimationUsingKeyFrames>
+    </Storyboard>
+    <!--通用contentGrid淡出动画 2秒-->
+    <Storyboard x:Key="FadeOutAnimation2s">
+        <!--不透明度-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+                                       AutoReverse="False"
+                                       FillBehavior="HoldEnd">
+            <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--不透明度蒙版-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
+                                        Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="-1"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="-0.25"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:2.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:3.0" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--彻底消失-->
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+            <DiscreteObjectKeyFrame KeyTime="0:0:3" Value="{x:Static Visibility.Collapsed}"/>
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+    <!--通用contentGrid淡出动画 3秒-->
+    <Storyboard x:Key="FadeOutAnimation3s">
+        <!--不透明度-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+                                       AutoReverse="False"
+                                       FillBehavior="HoldEnd">
+            <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:3" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--不透明度蒙版-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
+                                        Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:3.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:3.8" Value="-1"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:3.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:3.8" Value="-0.25"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:3.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:4.0" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--彻底消失-->
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+            <DiscreteObjectKeyFrame KeyTime="0:0:4" Value="{x:Static Visibility.Collapsed}"/>
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+    <!--通用contentGrid淡出动画 6秒-->
+    <Storyboard x:Key="FadeOutAnimation6s">
+        <!--不透明度-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+                                       AutoReverse="False"
+                                       FillBehavior="HoldEnd">
+            <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:6" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--不透明度蒙版-->
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
+                                        Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:6.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:6.8" Value="-1"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:6.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:6.8" Value="-0.25"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
+                                       Storyboard.TargetName="contentGrid">
+            <EasingDoubleKeyFrame KeyTime="0:0:6.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:7.0" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+        <!--彻底消失-->
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+            <DiscreteObjectKeyFrame KeyTime="0:0:7" Value="{x:Static Visibility.Collapsed}"/>
+        </ObjectAnimationUsingKeyFrames>
+    </Storyboard>
+    
+
+    <!--四列表堆叠-->
+    <Style TargetType="{x:Type local:cChatHistoryViewer}">
+        <!--资源-->
+        <Style.Resources>
+            <!--聊天消息气泡-->
+            <Style x:Key="ChatMessagesContentPresenterStyle" TargetType="ContentPresenter">
+                <Style.Resources>
+                    <!--外机发言-->
+                    <DataTemplate x:Key="LeftItem">
+                        <Grid x:Name="contentGrid"
+                              Background="#0005FFFF"
+                              Margin="5,0,5,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <!--BOT头像-->
+                            <Border Grid.Column="0"
+                                    VerticalAlignment="Top"
+                                    CornerRadius="12"
+                                    Width="24" Height="24"
+                                    BorderThickness="1"
+                                    BorderBrush="{Binding BorderColor}"
+                                    Margin="0,5,3,0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding ImageSource,
+                                                                      Converter={StaticResource cChatHistoryViewer_converter_imagesource}}"/>
+                                </Border.Background>
+                            </Border>
+
+                            <!--用户名+消息-->
+                            <StackPanel Grid.Column="1"
+                                        Margin="0,12,0,0">
+                                <!--BOT用户名-->
+                                <Border HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top"
+                                        Margin="0,0,0,2">
+                                    <TextBlock Text="{Binding SenderName}"
+                                               FontFamily="Calibri"
+                                               Foreground="White"
+                                               FontSize="{Binding [1], Source={StaticResource doubleCollection}}" >
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect ShadowDepth="0" 
+                                                              BlurRadius="2"
+                                                              Opacity="1"
+                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                </Border>
+
+                                <!--BOT消息主体-->
+                                <Grid MaxWidth="{Binding ActualWidth, 
+                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
+                                                         Converter={StaticResource cChatHistoryViewer_converter_textblock_maxwidth}}"
+                                      HorizontalAlignment="Left" 
+                                      VerticalAlignment="Top"
+                                      Background="Transparent">
+                                    <Border x:Name="msg_background"
+                                            CornerRadius="0,6,2,6"
+                                            Background="{Binding BorderColor, 
+                                                                 FallbackValue=#000000}"
+                                            IsHitTestVisible="True">
+                                    </Border>
+
+                                    <TextBlock Text="{Binding Message,
+                                                              Converter={StaticResource cChatHistoryViewer_converter_textblock_textlimit},
+                                                              ConverterParameter=64}"
+                                               FontSize="{Binding [0], Source={StaticResource doubleCollection}}" 
+                                               FontFamily="Calibri"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               Margin="4,1,4,3"/>
+                                </Grid>
+
+                            </StackPanel>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                    <!--本机发言-->
+                    <DataTemplate x:Key="RightItem">
+                        <Grid x:Name="contentGrid"
+                              Background="#0005FFFF"
+                              Margin="5,0,5,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Player头像-->
+                            <Border Grid.Column="1"
+                                    VerticalAlignment="Top"
+                                    CornerRadius="12"
+                                    Width="24" Height="24"
+                                    BorderThickness="1"
+                                    BorderBrush="{Binding BorderColor}"
+                                    Margin="3,5,0,0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding ImageSource,
+                                                              Converter={StaticResource cChatHistoryViewer_converter_imagesource}}"/>
+                                </Border.Background>
+                            </Border>
+
+                            <!--用户名+消息-->
+                            <StackPanel Grid.Column="0"
+                                        Margin="0,12,0,0">
+                                <!--Player用户名-->
+                                <Border HorizontalAlignment="Right" 
+                                        VerticalAlignment="Top"
+                                        Margin="0,0,0,2">
+                                    <TextBlock Text="{Binding SenderName}"
+                                               FontFamily="Calibri"
+                                               Foreground="White"
+                                               FontSize="{Binding [1], Source={StaticResource doubleCollection}}" >
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect ShadowDepth="0" 
+                                                              BlurRadius="2"
+                                                              Opacity="1"
+                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                </Border>
+
+                                <!--Player消息主体-->
+                                <Grid MaxWidth="{Binding ActualWidth, 
+                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
+                                                         Converter={StaticResource cChatHistoryViewer_converter_textblock_maxwidth}}"
+                                      HorizontalAlignment="Right" 
+                                      VerticalAlignment="Top"
+                                      Background="Transparent">
+                                    <Border x:Name="msg_background"
+                                            CornerRadius="6,0,6,2"
+                                            Background="{Binding BorderColor, 
+                                                                 FallbackValue=#000000}"
+                                            IsHitTestVisible="True">
+                                    </Border>
+
+                                    <TextBlock Text="{Binding Message,
+                                                              Converter={StaticResource cChatHistoryViewer_converter_textblock_textlimit},
+                                                              ConverterParameter=64}"
+                                               FontSize="{Binding [0], Source={StaticResource doubleCollection}}" 
+                                               FontFamily="Calibri"
+                                               VerticalAlignment="Center"
+                                               Foreground="White"
+                                               TextWrapping="Wrap"
+                                               Margin="4,1,4,3"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Style.Resources>
+
+                <!--选择模板-->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsOwnMessage}" Value="true">
+                        <Setter Property="ContentTemplate" Value="{StaticResource RightItem}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsOwnMessage}" Value="false">
+                        <Setter Property="ContentTemplate" Value="{StaticResource LeftItem}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--额外消息气泡-->
+            <Style x:Key="SystemMessagesContentPresenterStyle" TargetType="ContentPresenter">
+                <Style.Resources>
+                    <!--系统消息/登录消息 通用模板-->
+                    <DataTemplate x:Key="ExPayloadTemplate">
+                        <Grid x:Name="contentGrid"
+                              Background="#D9000000"
+                              attached:UIElementHelper.CountdownToRemoveAttached="3000"
+                              attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
+                                                                                           RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
+                            <Grid.OpacityMask>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="0" Color="Black"/>
+                                    <GradientStop Offset="0.75" Color="Black"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                </LinearGradientBrush>
+                            </Grid.OpacityMask>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--信件图标-->
+                            <Path Grid.Column="0" 
+                                  Height="11"
+                                  Data="M1023.99872 114.561137v538.879326a117.759853 117.759853 0 0 1-33.279958 81.279899 113.279858 113.279858 0 0 1-79.9999 33.279958H113.279858a113.279858 113.279858 0 0 1-79.9999-33.279958A117.759853 117.759853 0 0 1 0 653.440463V114.561137a127.99984 127.99984 0 0 1 3.839995-30.719962L75.519906 128.00112l417.919477 239.9997a35.199956 35.199956 0 0 0 37.119954 0l417.919477-248.31969 69.759913-41.599948a117.759853 117.759853 0 0 1 5.759993 36.479955z
+                                        M970.878786 17.281258l-99.199876 58.879927L543.99932 271.360941a63.99992 63.99992 0 0 1-63.99992 0L142.719822 76.161185 47.99994 21.121254a111.99986 111.99986 0 0 1 63.99992-21.119974h798.719002a111.359861 111.359861 0 0 1 60.159924 17.279978z"
+                                  Fill="White"
+                                  Stretch="Uniform"
+                                  VerticalAlignment="Center"
+                                  Margin="3,2,3,2"/>
+                            <!--消息本体-->
+                            <TextBlock Grid.Column="1"  
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis"
+                                       Text="{Binding ExPayload.ExMessage}" 
+                                       FontSize="{Binding [2], Source={StaticResource doubleCollection}}"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       Background="Transparent"
+                                       Margin="0,0,3,0"/>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                            <DataTrigger Binding="{Binding Path=(attached:UIElementHelper.AlternationIndexAttached), 
+                                                           ElementName=contentGrid}" 
+                                         Value="0">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation2s}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Style.Resources>
+
+                <!--选择模板-->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="SystemAlert">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ExPayloadTemplate}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="SystemReply">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ExPayloadTemplate}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--对战消息气泡-->
+            <Style x:Key="GamePlayMessagesContentPresenterStyle" TargetType="ContentPresenter">
+                <Style.Resources>
+                    <!--对战请求/对战确认气泡-->
+                    <DataTemplate x:Key="GameMatchingExPayloadTemplate">
+                        <Grid x:Name="contentGrid"
+                              Background="#151515"
+                              attached:UIElementHelper.CountdownToRemoveAttached="4000"
+                              attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
+                                                                                           RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
+                            <Grid.OpacityMask>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="0" Color="Black"/>
+                                    <GradientStop Offset="0.75" Color="Black"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                </LinearGradientBrush>
+                            </Grid.OpacityMask>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Margin="5,0,0,0">
+                                <TextBlock FontSize="{Binding [3], Source={StaticResource doubleCollection}}">
+                                    <TextBlock Text="{Binding ExPayload.ExObject.ChallengerClientRealName}"
+                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}"
+                                               FontWeight="Bold">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="Gray"
+                                                              ShadowDepth="0" 
+                                                              BlurRadius="1"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock> 
+                                    <Run Text="{Binding ExPayload.ExObject.ChallengerMessage}" Foreground="White"/>
+                                </TextBlock>
+                            </Border>
+
+                            <Grid x:Name="confirmgrid"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <!--接受对战-->
+                                    <pathbuttonex:cPathButton Height="24"
+                                                              TextColor="LightGray"
+                                                              PathData="M512 960c247.424 0 448-200.512 448-448S759.424 64 512 64C264.576 64 64 264.576 64 512S264.576 960 512 960zM374.464 494.336c15.68-15.232 41.152-15.232 56.832 0l56.832 55.296 142.016-138.24c15.68-15.232 41.152-15.232 56.832 0 15.744 15.296 15.68 40.064 0 55.296L516.416 632.64c-15.68 15.232-41.152 15.232-56.832 0L374.464 549.632C358.72 534.4 358.72 509.568 374.464 494.336z"
+                                                              PathColor="#00CF35"
+                                                              Margin="5,0,0,0"
+                                                              Command="{Binding AcceptCommand}"/>
+                                    <!--拒绝对战-->
+                                    <pathbuttonex:cPathButton Height="24"
+                                                              TextColor="LightGray"
+                                                              PathData="M828.8 828.8c174.912-174.976 174.912-458.688 0-633.6-174.976-174.976-458.688-174.976-633.6 0-174.912 174.912-174.976 458.624 0 633.6C370.176 1003.776 653.888 1003.776 828.8 828.8zM373.824 427.584c-14.848-14.72-14.912-38.784-0.128-53.696 14.72-14.848 38.784-14.976 53.696-0.192L512 458.24l84.416-84.352c14.72-14.848 38.784-14.976 53.696-0.192 14.912 14.784 14.976 38.784 0.256 53.696L565.696 512l84.608 84.544c14.72 14.848 14.656 38.912-0.256 53.696-14.848 14.784-38.912 14.656-53.696-0.128L512 565.696 427.392 650.24c-14.848 14.784-38.912 14.72-53.696-0.192C358.912 635.2 358.976 611.136 373.824 596.352L458.24 512 373.824 427.584z"
+                                                              PathColor="#FF5F4D"
+                                                              Margin="5,0,0,0"
+                                                              Command="{Binding RejectCommand}"/>
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                            <DataTrigger Binding="{Binding Path=(attached:UIElementHelper.AlternationIndexAttached), 
+                                                            ElementName=contentGrid}" 
+                                         Value="0">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation3s}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ExPayload.ExObject.ResponseToChallenge}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="confirmgrid"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+
+                    <!--对战中气泡-->
+                    <DataTemplate x:Key="GameInProgressExPayloadTemplate">
+                        <Grid x:Name="contentGrid"
+                              Background="#151515">
+
+                            <Border VerticalAlignment="Center"
+                                    Margin="5,0,0,0">
+                                <TextBlock FontSize="{Binding [3], Source={StaticResource doubleCollection}}">
+                                    <TextBlock Text="{Binding ExPayload.ExObject.ChessPoint}"
+                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="Gray"
+                                                              ShadowDepth="0" 
+                                                              BlurRadius="1"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock> 
+                                    <Run Text="{Binding ExPayload.ExObject.ChallengerMessage}" Foreground="White"/>
+                                </TextBlock>
+                            </Border>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                            <DataTrigger Binding="{Binding Path=(attached:UIElementHelper.AlternationIndexAttached), 
+                                                            ElementName=contentGrid}" 
+                                         Value="0">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation3s}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Style.Resources>
+
+                <!--选择模板-->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="GameMatching">
+                        <Setter Property="ContentTemplate" Value="{StaticResource GameMatchingExPayloadTemplate}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="GameConfirm">
+                        <Setter Property="ContentTemplate" Value="{StaticResource GameMatchingExPayloadTemplate}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="GameInProgress">
+                        <Setter Property="ContentTemplate" Value="{StaticResource GameInProgressExPayloadTemplate}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--结算消息气泡-->
+            <Style x:Key="WinnerMessagesContentPresenterStyle" TargetType="ContentPresenter">
+                <Style.Resources>
+                    <!--结算气泡-->
+                    <DataTemplate x:Key="WinnerAlertExPayloadTemplate">
+                        <Grid x:Name="contentGrid"
+                              Background="#151515"
+                              attached:UIElementHelper.CountdownToRemoveAttached="7000"
+                              attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
+                                                                                           RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
+                            <Grid.OpacityMask>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="0" Color="Black"/>
+                                    <GradientStop Offset="0.75" Color="Black"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                    <GradientStop Offset="1" Color="Transparent"/>
+                                </LinearGradientBrush>
+                            </Grid.OpacityMask>
+
+                            <Border VerticalAlignment="Center" 
+                                    Margin="5,0,0,0" Background="Transparent">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <pathbuttonex:cPathButton Grid.Column="0" 
+                                                              Width="{Binding ActualHeight,RelativeSource={RelativeSource Self}}" 
+                                                              Height="14"
+                                                              VerticalAlignment="Stretch"
+                                                              PathColor="Yellow"
+                                                              PathData="M965.313695 63.733935h-121.629647V35.515857c0-11.919705-18.366077-21.650077-30.407412-21.650077H209.871956c-11.919705 0-30.407412 9.730372-30.407412 21.650077v28.096448h-121.629647c-25.298967 0-44.516451 31.745338-44.516451 57.044305v136.103575c0 114.696757 80.032308 210.905808 186.21499 237.90759 37.705191 106.061052 129.170685 187.431286 245.448628 211.635586v88.059865h-18.730965c-12.527854 0-31.01556 3.040741-31.01556 15.690225v67.382824h-99.249792c-12.527854 0-16.784891 5.716593-16.784892 13.98741v94.384606c0 8.270816 4.257038 24.325929 16.784892 24.325929h431.298729c12.527854 0 16.784891-15.933484 16.784891-24.325929v-94.627866c0-8.270816-4.257038-13.987409-16.784891-13.987409h-99.371422v-67.382825c0-12.527854-18.366077-15.690224-31.01556-15.690224h-18.730966v-88.059865c116.034683-24.325929 207.500178-105.452904 245.326999-211.757216C929.797838 467.422734 1009.708516 371.213683 1009.708516 256.638556V120.413351c0-25.055707-19.217484-56.679416-44.394821-56.679416zM179.464544 379.11961v36.002376c-63.855565-28.461337-116.156313-92.438532-116.156313-166.632617v-135.008908h116.156313v265.639149z m463.652216-82.4649l-53.395415 52.179118c-2.554223 2.554223-3.770519 6.081482-3.162371 9.730372l12.527853 73.585937c1.581185 9.000594-8.027557 15.811854-16.176743 11.554816l-71.274973-37.340302-71.274973 37.461932c-3.648889 1.946074-8.149186 1.581185-11.554817-0.851408s-5.108445-6.568001-4.378667-10.703409l12.527854-73.585936c0.608148-3.52726-0.486519-7.176149-3.162371-9.730372L380.153462 296.776339c-3.040741-2.919112-4.135408-7.297779-2.797481-11.433187 1.337926-4.013778 4.743556-7.05452 9.000593-7.541038l73.829196-10.703409c3.52726-0.486519 6.689631-2.797482 8.270816-6.081482l33.083264-66.896306c1.824445-3.770519 5.716593-6.203112 9.973631-6.203112 4.257038 0 8.027557 2.432593 9.973631 6.203112l33.083265 66.896306c1.581185 3.284 4.743556 5.473334 8.270816 6.081482l73.829195 10.703409c9.365483 1.337926 12.892743 12.649483 6.446372 18.852596zM959.840361 248.610999c0 74.194085-52.300748 138.171279-116.156313 166.632617V113.480461H959.840361v135.130538z m0 0"
+                                                              PathMargin="0"
+                                                              PathBackgroundColor="Transparent"
+                                                              Margin="0,0,2,0"/>
+
+                                    <TextBlock Grid.Column="1" 
+                                               FontSize="{Binding [3], Source={StaticResource doubleCollection}}" 
+                                               Text="{Binding ExPayload.ExObject.ChallengerClientRealName}"
+                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}"
+                                               FontWeight="Bold">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="Gray"
+                                                              ShadowDepth="0" 
+                                                              BlurRadius="1"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+
+                                    <colorfultextblockex:cColorfulTextBlock Grid.Column="2"
+                                                                            FontSize="{Binding [3], Source={StaticResource doubleCollection}}"
+                                                                            Text="{Binding ExPayload.ExObject.ChallengerMessage}"
+                                                                            TextHorizontalAlignment="Left">
+                                        <UIElement.Visibility>
+                                            <Binding Path="Visibility" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                        </UIElement.Visibility>
+                                    </colorfultextblockex:cColorfulTextBlock>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                            </EventTrigger>
+                            <DataTrigger Binding="{Binding Path=(attached:UIElementHelper.AlternationIndexAttached), 
+                                                           ElementName=contentGrid}" 
+                                         Value="0">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation6s}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Style.Resources>
+
+                <!--选择模板-->
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ExPayload.ExMessageType}" Value="WinnerAlert">
+                        <Setter Property="ContentTemplate" Value="{StaticResource WinnerAlertExPayloadTemplate}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+        
+        <!--容器-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cChatHistoryViewer}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <!--聊天消息容器-->
+                            <ItemsControl ItemsSource="{TemplateBinding ChatMessages}"
+                                          AlternationCount="100001">
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <Border>
+                                            <scrollviewerex:cScrollViewer Focusable="false" 
+                                                                          Padding="{TemplateBinding Padding}"
+                                                                          HorizontalScrollBarVisibility="Hidden"
+                                                                          VerticalScrollBarVisibility="Auto">
+                                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </scrollviewerex:cScrollViewer>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                <ItemsControl.ItemContainerStyle>
+                                    <StaticResource ResourceKey="ChatMessagesContentPresenterStyle"/>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+
+                            <!--系统消息容器-->
+                            <ItemsControl ItemsSource="{TemplateBinding SystemMessages}" 
+                                          AlternationCount="100001">
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <Border>
+                                            <StackPanel IsItemsHost="True" Orientation="Vertical"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                <ItemsControl.ItemContainerStyle>
+                                    <StaticResource ResourceKey="SystemMessagesContentPresenterStyle"/>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+
+                            <!--对战消息容器-->
+                            <ItemsControl ItemsSource="{TemplateBinding GameMessages}"
+                                          AlternationCount="100001">
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <Border>
+                                            <StackPanel IsItemsHost="True" Orientation="Vertical"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                <ItemsControl.ItemContainerStyle>
+                                    <StaticResource ResourceKey="GamePlayMessagesContentPresenterStyle"/>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            
+                            <!--结算消息容器-->
+                            <ItemsControl ItemsSource="{TemplateBinding WinnerMessages}"
+                                          AlternationCount="100001">
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <Border>
+                                            <StackPanel IsItemsHost="True" Orientation="Vertical"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                <ItemsControl.ItemContainerStyle>
+                                    <StaticResource ResourceKey="WinnerMessagesContentPresenterStyle"/>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                            
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+</ResourceDictionary>

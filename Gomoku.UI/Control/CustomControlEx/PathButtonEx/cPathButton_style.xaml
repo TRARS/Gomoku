@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.PathButtonEx"
+                    xmlns:invertedcoloreffect="clr-namespace:Gomoku.UI.Control.EffectEx.InvertedColorEffect">
+    
+    <Style TargetType="{x:Type local:cPathButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cPathButton}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <Grid x:Name="host">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Border Grid.ColumnSpan="2"
+                                    Background="{TemplateBinding PathBackgroundColor}"
+                                    CornerRadius="2.5"/>
+
+                            <TextBlock x:Name="textblock"
+                                       Grid.Column="0"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="{TemplateBinding Text}"
+                                       Foreground="{TemplateBinding TextColor}"
+                                       Margin="5,0,5,0"/>
+                            
+                            <Path Grid.Column="1" 
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Fill="{TemplateBinding PathColor}"
+                                  Stretch="Uniform"
+                                  Data="{Binding PathData, RelativeSource={RelativeSource TemplatedParent}}"
+                                  Margin="{TemplateBinding PathMargin}"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Effect" TargetName="host">
+                                <Setter.Value>
+                                    <invertedcoloreffect:InvertColorEffect Threshold="1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Text,RelativeSource={RelativeSource Self}}" Value="">
+                            <Setter TargetName="textblock" Property="Margin" Value="0"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
