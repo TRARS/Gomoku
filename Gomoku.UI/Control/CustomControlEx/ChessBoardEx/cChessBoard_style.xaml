@@ -8,6 +8,7 @@
     <local:cChessBoard_converter_weekpointmargin2margin x:Key="cChessBoard_converter_weekpointmargin2margin"/>
     
     <Style TargetType="{x:Type local:cChessBoard}">
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:cChessBoard}">
@@ -19,7 +20,7 @@
                                     CornerRadius="{TemplateBinding ChessBoardCornerRadius}"/>
 
                             <!--网格-->
-                            <Border Background="{Binding BackgroundBrush}"
+                            <Border Background="{Binding ChessBoardBackground}"
                                     Width="{Binding ChessBoardSize.X}"
                                     Height="{Binding ChessBoardSize.Y}"
                                     CornerRadius="5"
@@ -54,7 +55,6 @@
 
                             <!--棋子容器-->
                             <ItemsControl ItemsSource="{Binding StoneVMList}"
-                                          Background="DarkGray" 
                                           IsHitTestVisible="False">
                                 <ItemsControl.Template>
                                     <ControlTemplate TargetType="ItemsControl">

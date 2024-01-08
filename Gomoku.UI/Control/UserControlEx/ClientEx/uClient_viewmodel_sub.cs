@@ -10,7 +10,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using MenuType = Gomoku.UI.Control.CustomControlEx.MenuButtonEx.ButtonType;
 using StoneType = Gomoku.UI.Control.CustomControlEx.StoneButtonEx.ButtonType;
@@ -548,14 +547,14 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             }
         }
 
-        private Brush _backgroundBrush;
-        public Brush BackgroundBrush
+        private Brush _chessBoardBackground;
+        public Brush ChessBoardBackground
         {
-            get => _backgroundBrush;
+            get => _chessBoardBackground;
             set
             {
-                if (_backgroundBrush == value) { return; }
-                _backgroundBrush = value;
+                if (_chessBoardBackground == value) { return; }
+                _chessBoardBackground = value;
                 NotifyPropertyChanged();
             }
         }
@@ -573,7 +572,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _horizontalGridCount = horizontalGridCount;
             _verticalGridCount = verticalGridCount;
 
-            _backgroundBrush = CreateGridTile(gridSize, horizontalGridCount, verticalGridCount);
+            _chessBoardBackground = CreateGridTile(gridSize, horizontalGridCount, verticalGridCount);
             _chessBoardSize = new(_gridSize * _horizontalGridCount, _gridSize * _verticalGridCount);
 
             StoneVMList = new();
@@ -585,9 +584,9 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             var vSize = gSize * vCount;
 
             Rect bounds = new Rect(0, 0, hSize, vSize); //屏幕矩形
-            double sideLength = gSize;                      //方形单位尺寸
-            double thickness = 1;                           //笔头粗细度
-            bool isSlash = false;                           //是否斜线
+            double sideLength = gSize;                  //方形单位尺寸
+            double thickness = 1;                       //笔头粗细度
+            bool isSlash = false;                       //是否斜线
             SolidColorBrush penColor = new((Color)ColorConverter.ConvertFromString("#3F4B57"));
 
             var gridColor = penColor;

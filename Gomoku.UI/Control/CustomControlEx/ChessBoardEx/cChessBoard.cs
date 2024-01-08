@@ -23,7 +23,5 @@ namespace Gomoku.UI.Control.CustomControlEx.ChessBoardEx
             ownerType: typeof(cChessBoard),
             typeMetadata: new FrameworkPropertyMetadata(new CornerRadius(5), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
-
-
     }
 }

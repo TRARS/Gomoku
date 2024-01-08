@@ -32,8 +32,7 @@
                             <Binding Path="IsActive" RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
                         </MultiBinding>
                     </attached:UIElementHelper.LoadedAttached>
-                    <Border CornerRadius="{Binding CornerRadius, ElementName=border}"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Border CornerRadius="{Binding CornerRadius, ElementName=border}">
                         <Border.Background>
                             <RadialGradientBrush GradientOrigin="0.35,0.3" 
                                                  Center="0.5,0.5"
@@ -64,13 +63,27 @@
                     <DataTrigger Binding="{Binding EnableHighLight, RelativeSource={RelativeSource Self}}" Value="True">
                         <Setter Property="Effect">
                             <Setter.Value>
-                                <DropShadowEffect BlurRadius="13" ShadowDepth="0" Color="Lime" RenderingBias="Performance"/>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Color="NavajoWhite"/>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Effect" TargetName="border">
+                            <Setter.Value>
+                                <DropShadowEffect BlurRadius="6" ShadowDepth="0" Color="Yellow"/>
                             </Setter.Value>
                         </Setter>
                         <DataTrigger.EnterActions>
                             <BeginStoryboard x:Name="BlurRadiusAnm">
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.Opacity"
+                                                                   RepeatBehavior="Forever"
+                                                                   AutoReverse="True">
+                                        <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:0.25" Value="1"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:1.25" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.Opacity"
+                                                                   Storyboard.TargetName="border"
                                                                    RepeatBehavior="Forever"
                                                                    AutoReverse="True">
                                         <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
@@ -106,8 +119,7 @@
                             <Binding Path="IsActive" RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
                         </MultiBinding>
                     </attached:UIElementHelper.LoadedAttached>
-                    <Border CornerRadius="{Binding CornerRadius,ElementName=border}"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Border CornerRadius="{Binding CornerRadius,ElementName=border}">
                         <Border.Background>
                             <RadialGradientBrush GradientOrigin="0.35,0.3" 
                                                  Center="0.5,0.5"
@@ -137,13 +149,27 @@
                     <DataTrigger Binding="{Binding EnableHighLight, RelativeSource={RelativeSource Self}}" Value="True">
                         <Setter Property="Effect">
                             <Setter.Value>
-                                <DropShadowEffect BlurRadius="13" ShadowDepth="0" Color="Lime" RenderingBias="Performance"/>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Color="Yellow"/>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Effect" TargetName="border">
+                            <Setter.Value>
+                                <DropShadowEffect BlurRadius="6" ShadowDepth="0" Color="NavajoWhite"/>
                             </Setter.Value>
                         </Setter>
                         <DataTrigger.EnterActions>
                             <BeginStoryboard x:Name="BlurRadiusAnm">
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.Opacity"
+                                                                   RepeatBehavior="Forever"
+                                                                   AutoReverse="True">
+                                        <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:0.25" Value="1"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="0:0:1.25" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.Opacity"
+                                                                   Storyboard.TargetName="border"
                                                                    RepeatBehavior="Forever"
                                                                    AutoReverse="True">
                                         <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1"/>

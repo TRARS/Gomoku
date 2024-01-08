@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
 {
-    internal class cMenuButton_converter_clickpos2x : IMultiValueConverter
+    internal class cMenuButton_converter_clickpos2xy : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,7 +28,7 @@ namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
             throw new NotImplementedException();
         }
     }
-    internal class cMenuButton_converter_str2brush : IMultiValueConverter
+    internal class cMenuButton_converter_size2brush : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

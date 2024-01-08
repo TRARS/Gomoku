@@ -157,7 +157,7 @@
                                 <!--BOT用户名-->
                                 <Border HorizontalAlignment="Left" 
                                         VerticalAlignment="Top"
-                                        Margin="0,0,0,2">
+                                        Margin="0,0,0,1">
                                     <TextBlock Text="{Binding SenderName}"
                                                FontFamily="Calibri"
                                                Foreground="White"
@@ -166,7 +166,8 @@
                                             <DropShadowEffect ShadowDepth="0" 
                                                               BlurRadius="2"
                                                               Opacity="1"
-                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"/>
+                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"
+                                                              />
                                         </TextBlock.Effect>
                                     </TextBlock>
                                 </Border>
@@ -193,7 +194,7 @@
                                                Foreground="White"
                                                VerticalAlignment="Center"
                                                TextWrapping="Wrap"
-                                               Margin="4,1,4,3"/>
+                                               Margin="4,1,4,1"/>
                                 </Grid>
 
                             </StackPanel>
@@ -235,7 +236,7 @@
                                 <!--Player用户名-->
                                 <Border HorizontalAlignment="Right" 
                                         VerticalAlignment="Top"
-                                        Margin="0,0,0,2">
+                                        Margin="0,0,0,1">
                                     <TextBlock Text="{Binding SenderName}"
                                                FontFamily="Calibri"
                                                Foreground="White"
@@ -244,7 +245,8 @@
                                             <DropShadowEffect ShadowDepth="0" 
                                                               BlurRadius="2"
                                                               Opacity="1"
-                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"/>
+                                                              Color="{Binding BorderColor, Converter={StaticResource cChatHistoryViewer_converter_solidcolorbrush2color}}"
+                                                              />
                                         </TextBlock.Effect>
                                     </TextBlock>
                                 </Border>
@@ -271,7 +273,7 @@
                                                VerticalAlignment="Center"
                                                Foreground="White"
                                                TextWrapping="Wrap"
-                                               Margin="4,1,4,3"/>
+                                               Margin="4,1,4,1"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -459,8 +461,7 @@
                                                Foreground="{Binding ExPayload.ExObject.ChallengerColor}">
                                         <TextBlock.Effect>
                                             <DropShadowEffect Color="Gray"
-                                                              ShadowDepth="0" 
-                                                              BlurRadius="1"/>
+                                                              ShadowDepth="0"/>
                                         </TextBlock.Effect>
                                     </TextBlock> 
                                     <Run Text="{Binding ExPayload.ExObject.ChallengerMessage}" Foreground="White"/>

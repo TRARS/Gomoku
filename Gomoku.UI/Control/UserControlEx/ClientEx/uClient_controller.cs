@@ -6,7 +6,6 @@ using Gomoku.Core.Rule;
 using Gomoku.SocketUtils.Role;
 using System;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -16,9 +15,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ColorConverter = System.Windows.Media.ColorConverter;
+using MenuType = Gomoku.UI.Control.CustomControlEx.MenuButtonEx.ButtonType;
 using MultiPlayground = Gomoku.Core.Playground.MultiPlayground;
 using Playground = Gomoku.Core.Playground.Playground;
-using MenuType = Gomoku.UI.Control.CustomControlEx.MenuButtonEx.ButtonType;
 using StoneType = Gomoku.UI.Control.CustomControlEx.StoneButtonEx.ButtonType;
 
 
@@ -155,7 +154,12 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                 if (await playground.CursorMove(chessPoint) is not ChessMoveStatus.Forbidden)
                 {
-                    var type = await playground.CursorClick(chessPoint) is ChessPieceColor.Black ? StoneType.BlackStone : StoneType.WhiteStone;
+                    var type = (await playground.CursorClick(chessPoint)) switch
+                    {
+                        ChessPieceColor.Black => StoneType.BlackStone,
+                        ChessPieceColor.White => StoneType.WhiteStone,
+                        _ => throw new NotImplementedException()
+                    };
                     var diameter = stoneSize;
                     var radius = diameter / 2;
 
@@ -397,7 +401,12 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             {
                                 var chessPoint = matchObject.ChessPoint;
 
-                                var type = await playground.CursorClick(chessPoint) is ChessPieceColor.Black ? StoneType.BlackStone : StoneType.WhiteStone;
+                                var type = (await playground.CursorClick(chessPoint)) switch
+                                {
+                                    ChessPieceColor.Black => StoneType.BlackStone,
+                                    ChessPieceColor.White => StoneType.WhiteStone,
+                                    _ => throw new NotImplementedException()
+                                };
                                 var diameter = stoneSize;
                                 var radius = diameter / 2;
 

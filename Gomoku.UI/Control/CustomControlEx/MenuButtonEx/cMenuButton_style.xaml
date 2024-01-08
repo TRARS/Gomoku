@@ -5,8 +5,8 @@
                     xmlns:behavior="clr-namespace:Gomoku.Core.Helper.Behavior;assembly=Gomoku.Core" 
                     xmlns:translationaleffect="clr-namespace:Gomoku.UI.Control.EffectEx.TranslationalEffect">
     
-    <local:cMenuButton_converter_clickpos2x x:Key="cMenuButton_converter_clickpos2x"/>
-    <local:cMenuButton_converter_str2brush x:Key="cMenuButton_converter_str2brush"/>
+    <local:cMenuButton_converter_clickpos2xy x:Key="cMenuButton_converter_clickpos2xy"/>
+    <local:cMenuButton_converter_size2brush x:Key="cMenuButton_converter_size2brush"/>
     <local:cMenuButton_converter_opacity2scale x:Key="cMenuButton_converter_opacity2scale"/>
     <local:cMenuButton_converter_cornerradius2double x:Key="cMenuButton_converter_cornerradius2double"/>
     <local:cMenuButton_converter_size2rect x:Key="cMenuButton_converter_size2rect"/>
@@ -34,7 +34,7 @@
                         RenderTransformOrigin="0.5,0.5">
                     <!--边框染色-->
                     <Border.BorderBrush>
-                        <MultiBinding Converter="{StaticResource cMenuButton_converter_str2brush}"
+                        <MultiBinding Converter="{StaticResource cMenuButton_converter_size2brush}"
                                       ConverterParameter="0.15">
                             <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
                             <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
@@ -99,13 +99,13 @@
                                     </ScaleTransform>
                                     <TranslateTransform>
                                         <TranslateTransform.X>
-                                            <MultiBinding Converter="{StaticResource cMenuButton_converter_clickpos2x}">
+                                            <MultiBinding Converter="{StaticResource cMenuButton_converter_clickpos2xy}">
                                                 <Binding Path="(local:cMenuButton.ClickPos).X" RelativeSource="{RelativeSource TemplatedParent}"/>
                                                 <Binding Path="ActualWidth" ElementName="border"/>
                                             </MultiBinding>
                                         </TranslateTransform.X>
                                         <TranslateTransform.Y>
-                                            <MultiBinding Converter="{StaticResource cMenuButton_converter_clickpos2x}">
+                                            <MultiBinding Converter="{StaticResource cMenuButton_converter_clickpos2xy}">
                                                 <Binding Path="(local:cMenuButton.ClickPos).Y" RelativeSource="{RelativeSource TemplatedParent}"/>
                                                 <Binding Path="ActualHeight" ElementName="border"/>
                                             </MultiBinding>
@@ -302,7 +302,7 @@
                     </Border.Resources>
                     <!--边框染色-->
                     <Border.BorderBrush>
-                        <MultiBinding Converter="{StaticResource cMenuButton_converter_str2brush}"
+                        <MultiBinding Converter="{StaticResource cMenuButton_converter_size2brush}"
                                       ConverterParameter="0.15">
                             <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
                             <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
