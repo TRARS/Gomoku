@@ -70,15 +70,17 @@
                                                                     Diameter="{Binding Diameter}"
                                                                     Margin="{Binding Margin}"
                                                                     EnableHighLight="{Binding EnableHighLight}"
-                                                                    Visibility="{Binding Visibility}"/>
+                                                                    Visibility="{Binding Visibility}"
+                                                                    SoundCommand="{Binding SoundCommand}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
                             <!--棋子落点预览-->
-                            <stonebuttonex:cStoneButton Type="{Binding TempStoneVM.Type}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            <stonebuttonex:cStoneButton Type="{Binding TempStoneVM.Type, FallbackValue=RedStone}" HorizontalAlignment="Left" VerticalAlignment="Top"
                                                         Diameter="{Binding TempStoneVM.Diameter}"
                                                         Margin="{Binding TempStoneVM.Margin}"
+                                                        EnableHighLight="False"
                                                         Visibility="{Binding TempStoneVM.Visibility}"
                                                         IsHitTestVisible="False"/>
 

@@ -16,10 +16,12 @@
                                   Background="#0005FFFF"
                                   Margin="5">
 
-                                <menubuttonex:cMenuButton Width="65"
+                                <menubuttonex:cMenuButton Width="65" Height="0"
                                                           Text="{Binding Text}"
                                                           Command="{Binding Command}"
-                                                          BorderCornerRadius="2.5"/>
+                                                          BorderCornerRadius="2.5"
+                                                          BorderThickness="1"
+                                                          Type="{Binding Type}"/>
                             </Grid>
                         </DataTemplate>
                     </Setter.Value>

@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Gomoku.UI.Control.CustomControlEx.ChatAvatarEx"
                     xmlns:colorfultextblockex="clr-namespace:Gomoku.UI.Control.CustomControlEx.ColorfulTextBlockEx" 
-                    xmlns:ce="clr-namespace:Gomoku.UI.Control.CustomControlEx.MenuButtonEx">
+                    xmlns:ce="clr-namespace:Gomoku.UI.Control.CustomControlEx.MenuButtonEx" 
+                    xmlns:translationaleffect="clr-namespace:Gomoku.UI.Control.EffectEx.TranslationalEffect">
 
     <local:cChatAvatar_converter_imagesource x:Key="cChatAvatar_converter_imagesource"/>
 
@@ -26,27 +27,36 @@
                                     <RotateTransform Angle="0"/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
-                            
 
+                            <!--文本-->
                             <colorfultextblockex:cColorfulTextBlock Grid.Row="0"
                                                                     Text="{Binding ClientRealName,Mode=OneWay}"
                                                                     Foreground="{Binding ClientColor}"
                                                                     FontWeight="Bold"
                                                                     HorizontalAlignment="Stretch"/>
 
+                            <!--图像框-->
                             <Grid Grid.Row="1" 
                                   Width="64"
                                   Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}" 
                                   HorizontalAlignment="Center">
                                 <Border CornerRadius="5"
-                                        BorderThickness="1"
-                                        BorderBrush="{Binding ClientColor}"
+                                        BorderThickness="1.5"
+                                        BorderBrush="#40808080"
                                         Width="{Binding ActualWidth,RelativeSource={RelativeSource AncestorType=Grid}}" 
                                         Height="{Binding ActualWidth,RelativeSource={RelativeSource Self}}">
                                     <Border.Background>
                                         <ImageBrush ImageSource="{Binding ClientAvatarPath,
                                                                           Converter={StaticResource cChatAvatar_converter_imagesource}}"/>
                                     </Border.Background>
+                                </Border>
+
+                                <Border CornerRadius="5"
+                                        BorderThickness="1"
+                                        BorderBrush="{Binding ClientColor}">
+                                    <Border.Effect>
+                                        <translationaleffect:TranslationalEffect Threshold="0"/>
+                                    </Border.Effect>
                                 </Border>
                             </Grid>
                         </Grid>

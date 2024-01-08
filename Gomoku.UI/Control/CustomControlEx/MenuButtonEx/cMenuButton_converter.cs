@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -36,7 +35,7 @@ namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
             var width = double.Parse($"{values[0]}");
             var height = double.Parse($"{values[1]}");
             var delta = double.Parse($"{parameter}");
-            
+
             // 创建一个线性渐变画刷
             LinearGradientBrush linearGradientBrush = new LinearGradientBrush();
 
@@ -136,6 +135,47 @@ namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
             {
                 return Binding.DoNothing;
             }
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+
+
+
+
+    internal class cMenuButton_converter_thickness2margin : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var tk = (Thickness)value;
+            return new Thickness(-tk.Left, -tk.Top, -tk.Right, -tk.Bottom);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    internal class cMenuButton_converter_anm2radius : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var w = double.Parse($"{values[0]}");
+            var h = double.Parse($"{values[1]}");
+            var tk = (Thickness)values[2];
+            var op = double.Parse($"{values[3]}");
+            var result = Math.Min(w - (tk.Left + tk.Right), h - (tk.Top + tk.Bottom));
+            result = (w + h) * ((1 - op) / 1);
+
+            if (result is 0 || result is double.NaN || result < 0) { return Binding.DoNothing; }
+
+            return result;//选 Max 会导致圆形被切一刀不好看所以取 Min，放大倍数取(长边*2/短边)
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

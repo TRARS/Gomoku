@@ -7,6 +7,63 @@ using System.Windows.Controls;
 
 namespace Gomoku.Core.Helper.AttachedProperty
 {
+    // 载入
+    public partial class UIElementHelper
+    {
+        //
+        public static readonly DependencyProperty LoadedAttachedProperty = DependencyProperty.RegisterAttached(
+            name: "LoadedAttached",
+            propertyType: typeof(bool),
+            ownerType: typeof(UIElementHelper),
+            defaultMetadata: new FrameworkPropertyMetadata(false, OnLoadedAttachedChanged)
+        );
+        public static bool GetLoadedAttached(DependencyObject target)
+        {
+            return (bool)target.GetValue(LoadedAttachedProperty);
+        }
+        public static void SetLoadedAttached(DependencyObject target, bool value)
+        {
+            target.SetValue(LoadedAttachedProperty, value);
+        }
+        private static void OnLoadedAttachedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is FrameworkElement element)
+            {
+                if (GetLoadedAttached(element))
+                {
+                    element.Loaded += OnLoaded;
+                }
+                else
+                {
+                    element.Loaded -= OnLoaded;
+                }
+            }
+        }
+        private static void OnLoaded(object s, RoutedEventArgs e)
+        {
+            if (s is UIElement element)
+            {
+                GetLoadedCommand(element)?.Execute(s);
+            }
+        }
+
+        //
+        public static readonly DependencyProperty LoadedCommandProperty = DependencyProperty.RegisterAttached(
+            name: "LoadedCommand",
+            propertyType: typeof(AsyncRelayCommand),
+            ownerType: typeof(UIElementHelper),
+            defaultMetadata: new FrameworkPropertyMetadata(null)
+        );
+        public static AsyncRelayCommand GetLoadedCommand(DependencyObject target)
+        {
+            return (AsyncRelayCommand)target.GetValue(LoadedCommandProperty);
+        }
+        public static void SetLoadedCommand(DependencyObject target, AsyncRelayCommand value)
+        {
+            target.SetValue(LoadedCommandProperty, value);
+        }
+    }
+
     // 鼠标经过
     public partial class UIElementHelper
     {

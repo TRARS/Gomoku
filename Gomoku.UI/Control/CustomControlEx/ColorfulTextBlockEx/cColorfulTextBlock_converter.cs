@@ -10,7 +10,7 @@ namespace Gomoku.UI.Control.CustomControlEx.ColorfulTextBlockEx
         {
             if (value is double.NaN)
             {
-                return 0.0;
+                return Binding.DoNothing;
             }
 
             return value;

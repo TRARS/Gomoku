@@ -6,6 +6,7 @@ using Gomoku.Core.Rule;
 using Gomoku.SocketUtils.Role;
 using System;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -17,6 +18,7 @@ using System.Windows.Media;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using MultiPlayground = Gomoku.Core.Playground.MultiPlayground;
 using Playground = Gomoku.Core.Playground.Playground;
+using MenuType = Gomoku.UI.Control.CustomControlEx.MenuButtonEx.ButtonType;
 using StoneType = Gomoku.UI.Control.CustomControlEx.StoneButtonEx.ButtonType;
 
 
@@ -92,7 +94,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             chessBoardVM = viewmodel.ChessBoardViewModel = new(gridSize, horizontalGridCount, verticalGridCount);
             chessBoardVM.MouseClickCommand = new(para => this.MouseClick((IInputElement)para!));
             chessBoardVM.MouseMoveCommand = new(para => this.MouseMove((IInputElement)para!));
-            tempStoneVM = chessBoardVM.TempStoneVM = new(StoneType.RedStone, stoneSize / 2, new(0, 0), new(0), false, Visibility.Collapsed);
+            tempStoneVM = chessBoardVM.TempStoneVM = new(StoneType.RedStone, stoneSize / 2, new(0), false, Visibility.Collapsed);
 
             singlePlayMenuButtonGroupVM = viewmodel.SinglePlayMenuButtonGroupViewModel = new();
             singlePlayMenuButtonGroupVM.MenuVMList.Add(new("单机对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(StartGame)));
@@ -100,8 +102,8 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             singlePlayMenuButtonGroupVM.MenuVMList.Add(new("悔棋", roll.color[0], double.NaN, 25, new AsyncRelayCommand(UndoMove)));
 
             multiPlayMenuButtonGroupVM = viewmodel.MultiPlayMenuButtonGroupViewModel = new();
-            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("联机对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(SendMatchRequest)));
-            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("提前退场", roll.color[0], double.NaN, 25, new AsyncRelayCommand(AbortOnlineGame)));
+            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("联机对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(SendMatchRequest), MenuType.Custom));
+            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("提前退场", roll.color[0], double.NaN, 25, new AsyncRelayCommand(AbortOnlineGame), MenuType.Custom));
         }
     }
 
@@ -158,7 +160,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                     var radius = diameter / 2;
 
                     chessBoardVM.StoneVMList.LastItem()?.SetHighLight(false);
-                    chessBoardVM.StoneVMList.Add(new(type, diameter, chessPoint, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
+                    chessBoardVM.StoneVMList.Add(new(type, diameter, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
 
                     tempStoneVM.Type = StoneType.RedStone;
 
@@ -402,7 +404,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     chessBoardVM.StoneVMList.LastItem()?.SetHighLight(false);
-                                    chessBoardVM.StoneVMList.Add(new(type, diameter, chessPoint, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
+                                    chessBoardVM.StoneVMList.Add(new(type, diameter, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
 
                                     tempStoneVM.Type = StoneType.RedStone;
                                 });

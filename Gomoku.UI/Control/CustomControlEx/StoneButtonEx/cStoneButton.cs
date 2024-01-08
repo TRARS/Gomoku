@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Gomoku.Core.Helper.Base;
+using System.Windows;
 
 namespace Gomoku.UI.Control.CustomControlEx.StoneButtonEx
 {
@@ -46,6 +47,18 @@ namespace Gomoku.UI.Control.CustomControlEx.StoneButtonEx
             propertyType: typeof(bool),
             ownerType: typeof(cStoneButton),
             typeMetadata: new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
+        );
+
+        public AsyncRelayCommand SoundCommand
+        {
+            get { return (AsyncRelayCommand)GetValue(SoundCommandProperty); }
+            set { SetValue(SoundCommandProperty, value); }
+        }
+        public static readonly DependencyProperty SoundCommandProperty = DependencyProperty.Register(
+            name: "SoundCommand",
+            propertyType: typeof(AsyncRelayCommand),
+            ownerType: typeof(cStoneButton),
+            typeMetadata: new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
     }
 }

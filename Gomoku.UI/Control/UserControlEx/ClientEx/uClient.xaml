@@ -41,7 +41,7 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -133,35 +133,37 @@
         </Border>
         
         <!--按钮组-->
-        <Grid Grid.Column="2" 
-              Margin="0,5,0,5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid Grid.Column="2" d:Background="#584A5F">
+            <Grid Margin="0,5,0,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <menubuttongroupex:cMenuButtonGroup Grid.Row="0"
-                                                DataContext="{Binding SinglePlayMenuButtonGroupViewModel}"
-                                                MenuButtons="{Binding MenuVMList}"
-                                                d:MenuButtons="{d:SampleData ItemCount=3}"/>
-            <StackPanel Grid.Row="1">
-                <stonebuttonex:cStoneButton Type="BlackStone" Margin="5"/>
-                <stonebuttonex:cStoneButton Type="WhiteStone" Margin="5"/>
-                <stonebuttonex:cStoneButton Type="RedStone" Margin="5"/>
-            </StackPanel>
+                <menubuttongroupex:cMenuButtonGroup Grid.Row="0"
+                                                    DataContext="{Binding SinglePlayMenuButtonGroupViewModel}"
+                                                    MenuButtons="{Binding MenuVMList}"
+                                                    d:MenuButtons="{d:SampleData ItemCount=3}"/>
+            
+                <StackPanel Grid.Row="1">
+                    <stonebuttonex:cStoneButton Type="BlackStone" Margin="5"/>
+                    <stonebuttonex:cStoneButton Type="WhiteStone" Margin="5"/>
+                    <stonebuttonex:cStoneButton Type="RedStone" Margin="5"/>
+                </StackPanel>
 
-            <menubuttongroupex:cMenuButtonGroup Grid.Row="2"
-                                                DataContext="{Binding MultiPlayMenuButtonGroupViewModel}"
-                                                MenuButtons="{Binding MenuVMList}"
-                                                d:MenuButtons="{d:SampleData ItemCount=3}"/>
+                <menubuttongroupex:cMenuButtonGroup Grid.Row="2"
+                                                    DataContext="{Binding MultiPlayMenuButtonGroupViewModel}"
+                                                    MenuButtons="{Binding MenuVMList}"
+                                                    d:MenuButtons="{d:SampleData ItemCount=3}"/>
 
-            <chatavatarex:cChatAvatar Grid.Row="3"
-                           DataContext="{Binding ChatRoomJoinerViewModel}"
-                           VerticalAlignment="Bottom"
-                           Margin="0,0,0,2" 
-                           d:Background="#96C3C6"/>
+                <chatavatarex:cChatAvatar Grid.Row="3"
+                               DataContext="{Binding ChatRoomJoinerViewModel}"
+                               VerticalAlignment="Bottom"
+                               Margin="0,0,0,2" 
+                               d:Background="#96C3C6"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

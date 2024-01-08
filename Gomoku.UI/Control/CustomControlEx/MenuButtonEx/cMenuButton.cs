@@ -47,7 +47,10 @@ namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
             ownerType: typeof(cMenuButton),
             typeMetadata: new FrameworkPropertyMetadata(new CornerRadius(1), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
+    }
 
+    public partial class cMenuButton
+    {
         public Point ClickPos
         {
             get { return (Point)GetValue(ClickPosProperty); }
@@ -55,6 +58,18 @@ namespace Gomoku.UI.Control.CustomControlEx.MenuButtonEx
         }
         public static readonly DependencyProperty ClickPosProperty = DependencyProperty.Register(
             name: "ClickPos",
+            propertyType: typeof(Point),
+            ownerType: typeof(cMenuButton),
+            typeMetadata: new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
+        );
+
+        public Point EnterPos
+        {
+            get { return (Point)GetValue(EnterPosProperty); }
+            set { SetValue(EnterPosProperty, value); }
+        }
+        public static readonly DependencyProperty EnterPosProperty = DependencyProperty.Register(
+            name: "EnterPos",
             propertyType: typeof(Point),
             ownerType: typeof(cMenuButton),
             typeMetadata: new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
