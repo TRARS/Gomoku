@@ -1,4 +1,5 @@
 ﻿using ColorHelper;
+using CommunityToolkit.Mvvm.Input;
 using Gomoku.Core.Helper.Base;
 using Gomoku.Core.Helper.Extensions;
 using Gomoku.Core.Playground.Interface;
@@ -91,18 +92,18 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private void ChessBoardViewModelInit()
         {
             chessBoardVM = viewmodel.ChessBoardViewModel = new(gridSize, horizontalGridCount, verticalGridCount);
-            chessBoardVM.MouseClickCommand = new(para => this.MouseClick((IInputElement)para!));
-            chessBoardVM.MouseMoveCommand = new(para => this.MouseMove((IInputElement)para!));
+            chessBoardVM.MouseClickCommand = new(MouseClick);
+            chessBoardVM.MouseMoveCommand = new(MouseMove);
             tempStoneVM = chessBoardVM.TempStoneVM = new(StoneType.RedStone, stoneSize / 2, new(0), false, Visibility.Collapsed);
 
             singlePlayMenuButtonGroupVM = viewmodel.SinglePlayMenuButtonGroupViewModel = new();
-            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("单机对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(StartGame)));
-            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("结束对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(StopGame)));
-            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("悔棋", roll.color[0], double.NaN, 25, new AsyncRelayCommand(UndoMove)));
+            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("单机对战", roll.color[0], double.NaN, 25, new(StartGame)));
+            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("结束对战", roll.color[0], double.NaN, 25, new(StopGame)));
+            singlePlayMenuButtonGroupVM.MenuVMList.Add(new("悔棋", roll.color[0], double.NaN, 25, new(UndoMove)));
 
             multiPlayMenuButtonGroupVM = viewmodel.MultiPlayMenuButtonGroupViewModel = new();
-            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("联机对战", roll.color[0], double.NaN, 25, new AsyncRelayCommand(SendMatchRequest), MenuType.Custom));
-            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("提前退场", roll.color[0], double.NaN, 25, new AsyncRelayCommand(AbortOnlineGame), MenuType.Custom));
+            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("联机对战", roll.color[0], double.NaN, 25, new(SendMatchRequest), MenuType.Custom));
+            multiPlayMenuButtonGroupVM.MenuVMList.Add(new("提前退场", roll.color[0], double.NaN, 25, new(AbortOnlineGame), MenuType.Custom));
         }
     }
 
@@ -115,7 +116,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private async Task StartGame(object? args)
         {
             if (playground is MultiPlayground) { return; }
-            await playground.StartGame(horizontalGridCount, verticalGridCount, async (winnerColor) => { await Task.CompletedTask; });
+            await playground.StartGame(horizontalGridCount, verticalGridCount, async (isWinner) => { await Task.CompletedTask; });
         }
         private async Task StopGame(object? args)
         {
@@ -137,11 +138,11 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         }
 
         // 单机联机通用拿坐标方法
-        private async Task MouseClick(IInputElement para)
+        private async Task MouseClick(object? para)
         {
             if (playground.IsGameNotStarted) { return; }
 
-            Point relativePoint = Mouse.GetPosition(para);
+            Point relativePoint = Mouse.GetPosition((IInputElement)para!);
             double x = relativePoint.X;
             double y = relativePoint.Y;
 
@@ -176,9 +177,9 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                 }
             }
         }
-        private async Task MouseMove(IInputElement para)
+        private async Task MouseMove(object? para)
         {
-            Point relativePoint = Mouse.GetPosition(para);
+            Point relativePoint = Mouse.GetPosition((IInputElement)para!);
             double x = relativePoint.X;
             double y = relativePoint.Y;
 
@@ -264,12 +265,11 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             cooldownTimer = new(); // 计时器
 
             chatRoomJoinerVM = viewmodel.ChatRoomJoinerViewModel = new("サキュバス", roll.name[0], roll.color[0], roll.arr[0]);
-            chatRoomJoinerVM.ClientAvatarPath = $"./Control/IconEx/{chatRoomJoinerVM.ClientAvatarIdx + 1:00}.png";
 
             chatHistoryVM = viewmodel.ChatHistoryViewModel = new();
-            chatInputVM = viewmodel.ChatInputViewModel = new(new AsyncRelayCommand(SendMessageToServer), new AsyncRelayCommand(StartClient), chatRoomJoinerVM.ClientColor);
-            chatServerVM = viewmodel.ChatServerViewModel = new(chatRoomJoinerVM.TryGetLocalAddress(), 0, new AsyncRelayCommand(StartServer));
-            chatClientVM = viewmodel.ChatClientViewModel = new(chatRoomJoinerVM.TryGetLocalAddress(), "0", new AsyncRelayCommand(LoginConfirm), new AsyncRelayCommand(LoginCancel));
+            chatInputVM = viewmodel.ChatInputViewModel = new(new(SendMessageToServer), new(StartClient), chatRoomJoinerVM.ClientColor);
+            chatServerVM = viewmodel.ChatServerViewModel = new(chatRoomJoinerVM.TryGetLocalAddress(), 0, new(StartServer));
+            chatClientVM = viewmodel.ChatClientViewModel = new(chatRoomJoinerVM.TryGetLocalAddress(), "0", new(LoginConfirm), new(LoginCancel));
 
             chatServer = new ChatServer(chatRoomJoinerVM.ServerName);
             chatClient = new ChatClient(chatRoomJoinerVM.ClientName);
@@ -492,9 +492,10 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// <summary>
         /// 启动客户端
         /// </summary>
+        [RelayCommand]
         private async Task StartClient(object? args)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             // 显示确认窗口
             if (chatClient.IsStarted is false)
@@ -540,7 +541,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// </summary>
         private async Task LoginCancel(object? args)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             chatClientVM.ConfirmWindowVisibility = Visibility.Collapsed;
         }

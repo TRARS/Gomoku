@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
+using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace Gomoku.Core.Helper.Base
 {
-    //
+    // 
     public enum MessageType
     {
         WindowClose = 0,
@@ -12,14 +14,10 @@ namespace Gomoku.Core.Helper.Base
         WindowPosReset,           //窗体位置恢复至左上角
     }
 
-    //私有字段/属性/方法
-    public sealed partial class Mediator
-    {
-        private Dictionary<string, List<Action<object?>>> internalListEx = new();
-        private Dictionary<MessageType, List<Action<object?>>> internalList = new();
-    }
+    // 包装类
+    public record MessagePacket<T>(T message);
 
-    //限制为单例
+    // 限制为单例
     public sealed partial class Mediator
     {
         private static readonly Lazy<Mediator> lazyObject = new(() => new Mediator());
@@ -28,53 +26,19 @@ namespace Gomoku.Core.Helper.Base
         private Mediator() { }
     }
 
-    //公开方法
+    // 注册&发送
     public sealed partial class Mediator
     {
-        public void Register(MessageType type, Action<object?> callback)
+        private Mediator _recipient => this;
+
+        public void Register<T>(MessageType token, MessageHandler<object, T> handler) where T : class
         {
-            if (!internalList.ContainsKey(type))
-            {
-                internalList.Add(type, new List<Action<object?>>() { callback });
-            }
-            else
-            {
-                internalList[type].Add(callback);
-            }
+            StrongReferenceMessenger.Default.Register<T, string>(_recipient, Enum.GetName(typeof(MessageType), token)!, handler);
         }
-        public void NotifyColleagues(MessageType type, object? args)
+
+        public void Send<T>(MessageType token, T args) where T : class
         {
-            if (internalList.ContainsKey(type))
-            {
-                foreach (Action<object?> item in internalList[type])
-                {
-                    item?.Invoke(args);
-                }
-            }
-        }
-    }
-    public sealed partial class Mediator
-    {
-        public void Register(string type, Action<object?> callback)
-        {
-            if (!internalListEx.ContainsKey(type.Trim()))
-            {
-                internalListEx.Add(type, new List<Action<object?>>() { callback });
-            }
-            else
-            {
-                internalListEx[type].Add(callback);
-            }
-        }
-        public void NotifyColleagues(string type, object? args)
-        {
-            if (internalListEx.ContainsKey(type.Trim()))
-            {
-                foreach (Action<object?> item in internalListEx[type])
-                {
-                    item?.Invoke(args);
-                }
-            }
+            StrongReferenceMessenger.Default.Send(args, Enum.GetName(typeof(MessageType), token)!);
         }
     }
 }

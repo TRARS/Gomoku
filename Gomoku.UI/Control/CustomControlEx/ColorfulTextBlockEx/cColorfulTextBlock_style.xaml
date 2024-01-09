@@ -77,10 +77,8 @@
                                                 <Trigger.EnterActions>
                                                     <BeginStoryboard Name="Anm">
                                                         <Storyboard>
-                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.HorizontalOffset" 
-                                                                           Duration="0:0:5" 
-                                                                           AutoReverse="False" 
-                                                                           RepeatBehavior="Forever">
+                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.HorizontalOffset"
+                                                                                           RepeatBehavior="Forever">
                                                                 <LinearDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
                                                                 <LinearDoubleKeyFrame KeyTime="0:0:5" Value="0"/>
                                                             </DoubleAnimationUsingKeyFrames>

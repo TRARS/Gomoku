@@ -153,7 +153,7 @@
                                 <Storyboard FillBehavior="HoldEnd">
                                     <DoubleAnimation Storyboard.TargetName="contentText"
                                                      Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                     To="1.05" 
+                                                     To="1.1" 
                                                      Duration="0:0:0.1" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -203,50 +203,12 @@
                                 </Storyboard>
                             </BeginStoryboard>
                             
-                            <!--边框抖动-->
-                            <BeginStoryboard x:Name="borderAnm1">
-                                <Storyboard FillBehavior="Stop">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)" Storyboard.TargetName="border">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.05" Value="-2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.15" Value="2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.25" Value="-2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.35" Value="2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.40" Value="0">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
                         </Trigger.EnterActions>
                         <Trigger.ExitActions>
                             <!--删除动画-->
                             <RemoveStoryboard BeginStoryboardName="textblockAnm"/>
                             <RemoveStoryboard BeginStoryboardName="borderAnm"/>
-                            <RemoveStoryboard BeginStoryboardName="borderAnm1"/>
-                            
+
                             <!--文本复原-->
                             <BeginStoryboard>
                                 <Storyboard FillBehavior="HoldEnd">
@@ -260,12 +222,53 @@
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Trigger.EnterActions>
-                            <BeginStoryboard>
+                            <!--波纹-->
+                            <BeginStoryboard HandoffBehavior="Compose">
                                 <Storyboard FillBehavior="Stop">
                                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
                                                                    Storyboard.TargetName="circle_ellipse">
                                         <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                                         <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+
+                            <!--边框抖动-->
+                            <BeginStoryboard HandoffBehavior="Compose">
+                                <Storyboard FillBehavior="Stop">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)"
+                                                                   Storyboard.TargetName="border"
+                                                                   BeginTime="0:0:0.7">
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="-2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="-2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.35" Value="2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.40" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
                                     </DoubleAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>
@@ -277,7 +280,7 @@
                 </ControlTemplate.Triggers>
             </ControlTemplate>
 
-            <!--样式2 未实现-->
+            <!--样式2-->
             <ControlTemplate x:Key="Custom" TargetType="{x:Type local:cMenuButton}">
                 <Border x:Name="border"
                         Background="{TemplateBinding Background}" 
@@ -386,7 +389,7 @@
                                 <Storyboard FillBehavior="HoldEnd">
                                     <DoubleAnimation Storyboard.TargetName="contentText"
                                                      Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
-                                                     To="1.05" 
+                                                     To="1.1" 
                                                      Duration="0:0:0.1" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -436,49 +439,11 @@
                                 </Storyboard>
                             </BeginStoryboard>
 
-                            <!--边框抖动-->
-                            <BeginStoryboard x:Name="borderAnm1">
-                                <Storyboard FillBehavior="Stop">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)" Storyboard.TargetName="border">
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.05" Value="-2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.15" Value="2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.25" Value="-2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.35" Value="2">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:1.40" Value="0">
-                                            <EasingDoubleKeyFrame.EasingFunction>
-                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
-                                            </EasingDoubleKeyFrame.EasingFunction>
-                                        </EasingDoubleKeyFrame>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
                         </Trigger.EnterActions>
                         <Trigger.ExitActions>
                             <!--删除动画-->
                             <RemoveStoryboard BeginStoryboardName="textblockAnm"/>
                             <RemoveStoryboard BeginStoryboardName="borderAnm"/>
-                            <RemoveStoryboard BeginStoryboardName="borderAnm1"/>
 
                             <!--文本复原-->
                             <BeginStoryboard>
@@ -493,13 +458,54 @@
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Trigger.EnterActions>
-                            <BeginStoryboard>
+                            <!--波纹-->
+                            <BeginStoryboard HandoffBehavior="Compose">
                                 <Storyboard FillBehavior="HoldEnd">
                                     <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
                                                      Storyboard.TargetName="path_ellipse">
                                         <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
                                         <EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                            
+                            <!--边框抖动-->
+                            <BeginStoryboard HandoffBehavior="Compose">
+                                <Storyboard FillBehavior="Stop">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)"
+                                                                   Storyboard.TargetName="border"
+                                                                   BeginTime="0:0:1.2">
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="-2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.15" Value="2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="-2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.35" Value="2">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.40" Value="0">
+                                            <EasingDoubleKeyFrame.EasingFunction>
+                                                <local:CustomEasingFunction EasingMode="EaseIn"/>
+                                            </EasingDoubleKeyFrame.EasingFunction>
+                                        </EasingDoubleKeyFrame>
                                     </DoubleAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>

@@ -173,7 +173,7 @@ namespace Gomoku.Core.Role
         // 打印方法
         private async Task Print(string str)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             Debug.WriteLine($"{DateTime.Now} -> Referee: {str}");
         }

@@ -1,4 +1,4 @@
-﻿using Gomoku.Core.Helper.Base;
+﻿using CommunityToolkit.Mvvm.Input;
 using Gomoku.Core.Helper.Extensions;
 using System.Collections;
 using System.Threading.Tasks;
@@ -50,15 +50,15 @@ namespace Gomoku.Core.Helper.AttachedProperty
         //
         public static readonly DependencyProperty LoadedCommandProperty = DependencyProperty.RegisterAttached(
             name: "LoadedCommand",
-            propertyType: typeof(AsyncRelayCommand),
+            propertyType: typeof(AsyncRelayCommand<object?>),
             ownerType: typeof(UIElementHelper),
             defaultMetadata: new FrameworkPropertyMetadata(null)
         );
-        public static AsyncRelayCommand GetLoadedCommand(DependencyObject target)
+        public static AsyncRelayCommand<object?> GetLoadedCommand(DependencyObject target)
         {
-            return (AsyncRelayCommand)target.GetValue(LoadedCommandProperty);
+            return (AsyncRelayCommand<object?>)target.GetValue(LoadedCommandProperty);
         }
-        public static void SetLoadedCommand(DependencyObject target, AsyncRelayCommand value)
+        public static void SetLoadedCommand(DependencyObject target, AsyncRelayCommand<object?> value)
         {
             target.SetValue(LoadedCommandProperty, value);
         }
@@ -107,15 +107,15 @@ namespace Gomoku.Core.Helper.AttachedProperty
         //
         public static readonly DependencyProperty MouseMoveCommandProperty = DependencyProperty.RegisterAttached(
             name: "MouseMoveCommand",
-            propertyType: typeof(AsyncRelayCommand),
+            propertyType: typeof(AsyncRelayCommand<object?>),
             ownerType: typeof(UIElementHelper),
             defaultMetadata: new FrameworkPropertyMetadata(null)
         );
-        public static AsyncRelayCommand GetMouseMoveCommand(DependencyObject target)
+        public static AsyncRelayCommand<object?> GetMouseMoveCommand(DependencyObject target)
         {
-            return (AsyncRelayCommand)target.GetValue(MouseMoveCommandProperty);
+            return (AsyncRelayCommand<object?>)target.GetValue(MouseMoveCommandProperty);
         }
-        public static void SetMouseMoveCommand(DependencyObject target, AsyncRelayCommand value)
+        public static void SetMouseMoveCommand(DependencyObject target, AsyncRelayCommand<object?> value)
         {
             target.SetValue(MouseMoveCommandProperty, value);
         }
@@ -164,15 +164,15 @@ namespace Gomoku.Core.Helper.AttachedProperty
         //
         public static readonly DependencyProperty MouseLeftButtonDownCommandProperty = DependencyProperty.RegisterAttached(
             name: "MouseLeftButtonDownCommand",
-            propertyType: typeof(AsyncRelayCommand),
+            propertyType: typeof(AsyncRelayCommand<object?>),
             ownerType: typeof(UIElementHelper),
             defaultMetadata: new FrameworkPropertyMetadata(null)
         );
-        public static AsyncRelayCommand GetMouseLeftButtonDownCommand(DependencyObject target)
+        public static AsyncRelayCommand<object?> GetMouseLeftButtonDownCommand(DependencyObject target)
         {
-            return (AsyncRelayCommand)target.GetValue(MouseLeftButtonDownCommandProperty);
+            return (AsyncRelayCommand<object?>)target.GetValue(MouseLeftButtonDownCommandProperty);
         }
-        public static void SetMouseLeftButtonDownCommand(DependencyObject target, AsyncRelayCommand value)
+        public static void SetMouseLeftButtonDownCommand(DependencyObject target, AsyncRelayCommand<object?> value)
         {
             target.SetValue(MouseLeftButtonDownCommandProperty, value);
         }

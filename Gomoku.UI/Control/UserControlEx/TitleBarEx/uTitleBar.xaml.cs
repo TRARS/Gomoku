@@ -19,19 +19,19 @@ namespace Gomoku.UI.Control.UserControlEx.TitleBarEx
         #region 缺省按钮的
         private void ResetPosButton_Click(object sender, RoutedEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(MessageType.WindowPosReset, new Vector(0, 0));
+            Mediator.Instance.Send<MessagePacket<Vector>>(MessageType.WindowPosReset, new MessagePacket<Vector>(new Vector(0, 0)));
         }
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(MessageType.WindowMinimize, null);
+            Mediator.Instance.Send<object>(MessageType.WindowMinimize, "");
         }
         private void MaximizeButton_Click(object sender, RoutedEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(MessageType.WindowMaximize, null);
+            Mediator.Instance.Send<object>(MessageType.WindowMaximize, "");
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(MessageType.WindowClose, null);
+            Mediator.Instance.Send<object>(MessageType.WindowClose, "");
         }
         #endregion
     }

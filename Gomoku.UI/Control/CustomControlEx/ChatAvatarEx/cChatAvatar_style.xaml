@@ -24,6 +24,7 @@
                             </Grid.RowDefinitions>
                             <Grid.RenderTransform>
                                 <TransformGroup>
+                                    <TranslateTransform Y="0"/>
                                     <RotateTransform Angle="0"/>
                                 </TransformGroup>
                             </Grid.RenderTransform>
@@ -65,10 +66,30 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
-                                <!--抖动-->
-                                <BeginStoryboard HandoffBehavior="Compose">
+                                <!--跳跃-->
+                                <!--<BeginStoryboard HandoffBehavior="Compose">
                                     <Storyboard FillBehavior="Stop">
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(RotateTransform.Angle)" Storyboard.TargetName="contentGrid">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.Y)" 
+                                                                       Storyboard.TargetName="contentGrid">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-60">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <ExponentialEase EasingMode="EaseOut"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="0">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <BounceEase EasingMode="EaseOut" Bounces="4"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>-->
+                                
+                                <!--抖动-->
+                                <BeginStoryboard x:Name="shakeAnm" HandoffBehavior="Compose">
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[1].(RotateTransform.Angle)" 
+                                                                       Storyboard.TargetName="contentGrid">
                                             <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="0">
                                                 <EasingDoubleKeyFrame.EasingFunction>
                                                     <ce:CustomEasingFunction EasingMode="EaseIn"/>
@@ -102,9 +123,13 @@
                                         </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </BeginStoryboard>
-                            </Trigger.EnterActions>
 
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="shakeAnm"/>
+                            </Trigger.ExitActions>
                         </Trigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

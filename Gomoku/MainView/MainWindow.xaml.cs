@@ -128,22 +128,22 @@ namespace Gomoku.MainView
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Mediator.Instance.Register(MessageType.WindowPosReset, para =>
+            Mediator.Instance.Register<MessagePacket<Vector>>(MessageType.WindowPosReset, (r, m) =>
             {
-                this.TryMoveToPrimaryMonitor((Vector?)para);
+                this.TryMoveToPrimaryMonitor(m.message);
             });
 
-            Mediator.Instance.Register(MessageType.WindowMinimize, _ =>
-            {
-                throw new NotImplementedException();
-            });
-
-            Mediator.Instance.Register(MessageType.WindowMaximize, _ =>
+            Mediator.Instance.Register<object>(MessageType.WindowMinimize, (r, m) =>
             {
                 throw new NotImplementedException();
             });
 
-            Mediator.Instance.Register(MessageType.WindowClose, _ =>
+            Mediator.Instance.Register<object>(MessageType.WindowMaximize, (r, m) =>
+            {
+                throw new NotImplementedException();
+            });
+
+            Mediator.Instance.Register<object>(MessageType.WindowClose, (r, m) =>
             {
                 MainWindowCloseAnimation.Invoke(this, () => { Environment.Exit(0); });
             });

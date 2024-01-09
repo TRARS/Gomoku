@@ -1,11 +1,10 @@
-﻿using Gomoku.Core.Helper.Base;
-using System;
+﻿using System;
 
 
 namespace Gomoku.UI.Control.UserControlEx.ClientEx
 {
     // 单例
-    partial class uClient_viewmodel : NotificationObject
+    partial class uClient_viewmodel
     {
         private static readonly Lazy<uClient_viewmodel> lazyObject = new(() => new uClient_viewmodel());
         public static uClient_viewmodel Instance => lazyObject.Value;

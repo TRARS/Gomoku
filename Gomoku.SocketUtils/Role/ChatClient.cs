@@ -36,7 +36,7 @@ namespace Gomoku.SocketUtils.Role
         // 启动客户端
         public async Task<bool> StartClient(string ipaddress, int port, Action<ClientMessage>? callback = null)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             if (StartState == StartState.Started || StartState == StartState.Starting)
             {

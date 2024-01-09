@@ -1,4 +1,4 @@
-﻿using Gomoku.Core.Helper.Base;
+﻿using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 
 namespace Gomoku.UI.Control.CustomControlEx.ServerStatusViewerEx
@@ -23,18 +23,6 @@ namespace Gomoku.UI.Control.CustomControlEx.ServerStatusViewerEx
             propertyType: typeof(CornerRadius),
             ownerType: typeof(cServerStatusViewer),
             typeMetadata: new FrameworkPropertyMetadata(new CornerRadius(0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
-        );
-
-        public AsyncRelayCommand CreateServerCommand
-        {
-            get { return (AsyncRelayCommand)GetValue(CreateServerCommandProperty); }
-            set { SetValue(CreateServerCommandProperty, value); }
-        }
-        public static readonly DependencyProperty CreateServerCommandProperty = DependencyProperty.Register(
-            name: "CreateServerCommand",
-            propertyType: typeof(AsyncRelayCommand),
-            ownerType: typeof(cServerStatusViewer),
-            typeMetadata: new FrameworkPropertyMetadata(new AsyncRelayCommand(null), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
     }
 }

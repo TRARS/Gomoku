@@ -158,11 +158,13 @@
                                                     MenuButtons="{Binding MenuVMList}"
                                                     d:MenuButtons="{d:SampleData ItemCount=3}"/>
 
-                <chatavatarex:cChatAvatar Grid.Row="3"
-                                          DataContext="{Binding ChatRoomJoinerViewModel}"
-                                          VerticalAlignment="Bottom"
-                                          Margin="0,0,0,2" 
-                                          d:Background="#96C3C6"/>
+                <Border Grid.Row="3" d:Background="#C1FF8A">
+                    <chatavatarex:cChatAvatar DataContext="{Binding ChatRoomJoinerViewModel}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Bottom"
+                                              Margin="0,0,0,2" 
+                                              />
+                </Border>
             </Grid>
         </Grid>
     </Grid>

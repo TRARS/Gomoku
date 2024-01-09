@@ -1,4 +1,4 @@
-﻿using Gomoku.Core.Helper.Base;
+﻿using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 
 namespace Gomoku.UI.Control.CustomControlEx.ConfirmWindowEx
@@ -85,28 +85,28 @@ namespace Gomoku.UI.Control.CustomControlEx.ConfirmWindowEx
             typeMetadata: new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
 
-        public AsyncRelayCommand ConfirmCommand
+        public AsyncRelayCommand<object?> ConfirmCommand
         {
-            get { return (AsyncRelayCommand)GetValue(ConfirmCommandProperty); }
+            get { return (AsyncRelayCommand<object?>)GetValue(ConfirmCommandProperty); }
             set { SetValue(ConfirmCommandProperty, value); }
         }
         public static readonly DependencyProperty ConfirmCommandProperty = DependencyProperty.Register(
             name: "ConfirmCommand",
-            propertyType: typeof(AsyncRelayCommand),
+            propertyType: typeof(AsyncRelayCommand<object?>),
             ownerType: typeof(cConfirmWindow),
-            typeMetadata: new FrameworkPropertyMetadata(new AsyncRelayCommand(null), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
+            typeMetadata: new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
 
-        public AsyncRelayCommand CancelCommand
+        public AsyncRelayCommand<object?> CancelCommand
         {
-            get { return (AsyncRelayCommand)GetValue(CancelCommandProperty); }
+            get { return (AsyncRelayCommand<object?>)GetValue(CancelCommandProperty); }
             set { SetValue(CancelCommandProperty, value); }
         }
         public static readonly DependencyProperty CancelCommandProperty = DependencyProperty.Register(
             name: "CancelCommand",
-            propertyType: typeof(AsyncRelayCommand),
+            propertyType: typeof(AsyncRelayCommand<object?>),
             ownerType: typeof(cConfirmWindow),
-            typeMetadata: new FrameworkPropertyMetadata(new AsyncRelayCommand(null), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
+            typeMetadata: new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault)
         );
     }
 }

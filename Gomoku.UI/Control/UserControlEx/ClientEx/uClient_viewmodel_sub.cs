@@ -1,4 +1,5 @@
-﻿using Gomoku.Core.Helper.Base;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Gomoku.SocketUtils.Role;
 using System;
 using System.Collections.ObjectModel;
@@ -19,14 +20,12 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// <para>继承 ObservableCollection</para>
     /// <para>Add() 带容量限制</para>
-    /// <para>Enqueue() 带出队特效</para>
     /// </summary>
     public class LimitedSizeObservableCollection<T> : ObservableCollection<T>
     {
         private object lockObject = new object();
         private int maxItemCount = 20;
         private int itemsToRemove = 12;
-
 
         /// <summary>
         /// 常规Add
@@ -271,80 +270,27 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 按钮VM
     /// </summary>
-    public partial class MenuButtonViewModel : NotificationObject
+    public partial class MenuButtonViewModel : ObservableObject
     {
+        [ObservableProperty]
         private string _text;
-        public string Text
-        {
-            get => _text;
-            set
-            {
-                if (_text != value) { return; }
-                _text = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _color;
-        public string Color
-        {
-            get => _color;
-            set
-            {
-                if (_color != value) { return; }
-                _color = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private double _width;
-        public double Width
-        {
-            get => _width;
-            set
-            {
-                if (_width != value) { return; }
-                _width = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private double _height;
-        public double Height
-        {
-            get => _height;
-            set
-            {
-                if (_height != value) { return; }
-                _height = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private AsyncRelayCommand _command;
-        public AsyncRelayCommand Command
-        {
-            get => _command;
-            set
-            {
-                _command = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _command;
 
+        [ObservableProperty]
         private MenuType _type;
-        public MenuType Type
-        {
-            get => _type;
-            set
-            {
-                if (_type != value) { return; }
-                _type = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        public MenuButtonViewModel(string text, string color, double width, double height, AsyncRelayCommand command, MenuType type = MenuType.Noamal)
+        public MenuButtonViewModel(string text, string color, double width, double height, AsyncRelayCommand<object?> command, MenuType type = MenuType.Noamal)
         {
             _text = text;
             _color = color;
@@ -359,9 +305,10 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 按钮组VM
     /// </summary>
-    public partial class MenuButtonGroupViewModel : NotificationObject
+    public partial class MenuButtonGroupViewModel : ObservableObject
     {
-        public ObservableCollection<MenuButtonViewModel> MenuVMList { get; init; }
+        [ObservableProperty]
+        public ObservableCollection<MenuButtonViewModel> menuVMList;
 
         public MenuButtonGroupViewModel()
         {
@@ -372,91 +319,38 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 棋子VM
     /// </summary>
-    public partial class StoneViewModel : NotificationObject
+    public partial class StoneViewModel : ObservableObject
     {
+        [ObservableProperty]
         private StoneType _type;
-        public StoneType Type
-        {
-            get => _type;
-            set
-            {
-                if (_type == value) { return; }
-                _type = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private double _diameter;
-        public double Diameter
-        {
-            get => _diameter;
-            set
-            {
-                if (_diameter == value) { return; }
-                _diameter = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private Thickness _margin;
-        public Thickness Margin
-        {
-            get => _margin;
-            set
-            {
-                if (_margin == value) { return; }
-                _margin = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private Visibility _visibility;
-        public Visibility Visibility
-        {
-            get => _visibility;
-            set
-            {
-                if (_visibility == value) { return; }
-                _visibility = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private bool _enablehighLight;
-        public bool EnableHighLight
-        {
-            get => _enablehighLight;
-            set
-            {
-                if (_enablehighLight == value) { return; }
-                _enablehighLight = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private bool _enableHighLight;
 
-        private AsyncRelayCommand _SoundCommand;
-        public AsyncRelayCommand SoundCommand
-        {
-            get => _SoundCommand;
-            set
-            {
-                if (_SoundCommand == value) { return; }
-                _SoundCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _SoundCommand;
 
-        private SoundPlayer? soundPlayer;
+
+        //private SoundPlayer? soundPlayer;
         private static string? assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
-        public StoneViewModel(StoneType type, double diameter, Thickness margin, bool enablehighLight = false, Visibility visibility = Visibility.Visible)
+        public StoneViewModel(StoneType type, double diameter, Thickness margin, bool enableHighLight = false, Visibility visibility = Visibility.Visible)
         {
             _type = type;
             _diameter = diameter;
             _margin = margin;
-            _enablehighLight = enablehighLight;
+            _enableHighLight = enableHighLight;
             _visibility = visibility;
-            _SoundCommand = new AsyncRelayCommand(async _ =>
+            _SoundCommand = new(async para =>
             {
                 var path = type switch
                 {
@@ -497,74 +391,32 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 棋盘VM
     /// </summary>
-    public partial class ChessBoardViewModel : NotificationObject
+    public partial class ChessBoardViewModel : ObservableObject
     {
+        [ObservableProperty]
         private double _gridSize;
-        public double GridSize
-        {
-            get => _gridSize;
-            set
-            {
-                if (_gridSize == value) { return; }
-                _gridSize = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private double _horizontalGridCount;
-        public double HorizontalGridCount
-        {
-            get => _horizontalGridCount;
-            set
-            {
-                if (_horizontalGridCount == value) { return; }
-                _horizontalGridCount = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private double _verticalGridCount;
-        public double VerticalGridCount
-        {
-            get => _verticalGridCount;
-            set
-            {
-                if (_verticalGridCount == value) { return; }
-                _verticalGridCount = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private Point _chessBoardSize;
-        public Point ChessBoardSize
-        {
-            get => _chessBoardSize;
-            set
-            {
-                if (_chessBoardSize == value) { return; }
-                _chessBoardSize = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private Brush _chessBoardBackground;
-        public Brush ChessBoardBackground
-        {
-            get => _chessBoardBackground;
-            set
-            {
-                if (_chessBoardBackground == value) { return; }
-                _chessBoardBackground = value;
-                NotifyPropertyChanged();
-            }
-        }
 
 
         public StoneViewModel TempStoneVM { get; set; }
         public ObservableCollection<StoneViewModel> StoneVMList { get; init; }
 
-        public AsyncRelayCommand MouseClickCommand { get; set; }
-        public AsyncRelayCommand MouseMoveCommand { get; set; }
+        [ObservableProperty]
+        public AsyncRelayCommand<object?> mouseClickCommand;
+
+        [ObservableProperty]
+        public AsyncRelayCommand<object?> mouseMoveCommand;
 
         public ChessBoardViewModel(double gridSize, double horizontalGridCount, double verticalGridCount)
         {
@@ -644,84 +496,29 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 聊天气泡VM
     /// </summary>
-    public partial class ChatMessageViewModel : NotificationObject
+    public partial class ChatMessageViewModel : ObservableObject
     {
+        [ObservableProperty]
         private bool _Dequeue;
-        public bool Dequeue
-        {
-            get { return _Dequeue; }
-            set
-            {
-                _Dequeue = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         public bool _isOwnMessage;
-        public bool IsOwnMessage
-        {
-            get { return _isOwnMessage; }
-            set
-            {
-                _isOwnMessage = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _message;
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                _message = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private SolidColorBrush _borderColor;
-        public SolidColorBrush BorderColor
-        {
-            get { return _borderColor; }
-            set
-            {
-                _borderColor = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _imageSource;//UI上显示的头像
-        public string ImageSource
-        {
-            get { return _imageSource; }
-            set
-            {
-                _imageSource = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _senderName;
-        public string SenderName
-        {
-            get { return _senderName; }
-            set
-            {
-                _senderName = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private Action<string> _callBack;
-        public Action<string> CallBack
-        {
-            get { return _callBack; }
-            set
-            {
-                _callBack = value;
-                NotifyPropertyChanged();
-            }
-        }
+
 
         /// <summary>
         /// 聊天气泡VM
@@ -743,29 +540,14 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 系统消息气泡VM
     /// </summary>
-    public partial class SystemMessageViewModel : NotificationObject
+    public partial class SystemMessageViewModel : ObservableObject
     {
+        [ObservableProperty]
         private bool _Dequeue;
-        public bool Dequeue
-        {
-            get { return _Dequeue; }
-            set
-            {
-                _Dequeue = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private AdditionalPayload _exPayload;
-        public AdditionalPayload ExPayload
-        {
-            get { return _exPayload; }
-            set
-            {
-                _exPayload = value;
-                NotifyPropertyChanged();
-            }
-        }
+
 
         /// <summary>
         /// 系统消息气泡VM
@@ -789,51 +571,19 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 对战消息气泡VM
     /// </summary>
-    public partial class GameMessageViewModel : NotificationObject
+    public partial class GameMessageViewModel : ObservableObject
     {
+        [ObservableProperty]
         private bool _Dequeue;
-        public bool Dequeue
-        {
-            get { return _Dequeue; }
-            set
-            {
-                _Dequeue = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private AdditionalPayload _exPayload;
-        public AdditionalPayload ExPayload
-        {
-            get { return _exPayload; }
-            set
-            {
-                _exPayload = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private AsyncRelayCommand _acceptCommand;
-        public AsyncRelayCommand AcceptCommand
-        {
-            get => _acceptCommand;
-            set
-            {
-                _acceptCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _acceptCommand;
 
-        private AsyncRelayCommand _rejectCommand;
-        public AsyncRelayCommand RejectCommand
-        {
-            get => _rejectCommand;
-            set
-            {
-                _rejectCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _rejectCommand;
 
         public GameMessageViewModel(AdditionalPayload exPayload)
         {
@@ -844,29 +594,13 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 结算消息气泡VM
     /// </summary>
-    public partial class WinnerMessagesViewModel : NotificationObject
+    public partial class WinnerMessagesViewModel : ObservableObject
     {
+        [ObservableProperty]
         private bool _Dequeue;
-        public bool Dequeue
-        {
-            get { return _Dequeue; }
-            set
-            {
-                _Dequeue = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private AdditionalPayload _exPayload;
-        public AdditionalPayload ExPayload
-        {
-            get { return _exPayload; }
-            set
-            {
-                _exPayload = value;
-                NotifyPropertyChanged();
-            }
-        }
 
         public WinnerMessagesViewModel(AdditionalPayload exPayload)
         {
@@ -877,7 +611,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 聊天记录VM
     /// </summary>
-    public partial class ChatHistoryViewModel : NotificationObject
+    public partial class ChatHistoryViewModel : ObservableObject
     {
         public LimitedSizeObservableCollection<ChatMessageViewModel> ChatMessages { get; init; }
         public LimitedSizeObservableCollection<SystemMessageViewModel> SystemMessages { get; init; }
@@ -899,60 +633,28 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 聊天输入VM
     /// </summary>
-    public partial class ChatInputViewmodel : NotificationObject
+    public partial class ChatInputViewmodel : ObservableObject
     {
+        [ObservableProperty]
         private string _userMessage;
-        public string UserMessage
-        {
-            get => _userMessage;
-            set
-            {
-                _userMessage = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _clientColor;
-        public string ClientColor
-        {
-            get => _clientColor;
-            init
-            {
-                _clientColor = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private AsyncRelayCommand _sendcommand;
-        public AsyncRelayCommand SendCommand
-        {
-            get => _sendcommand;
-            set
-            {
-                _sendcommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _sendCommand;
 
-        private AsyncRelayCommand _loginCommand;
-        public AsyncRelayCommand LoginCommand
-        {
-            get => _loginCommand;
-            set
-            {
-                _loginCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _loginCommand;
 
         /// <summary>
         /// 聊天输入VM
         /// </summary>
-        public ChatInputViewmodel(AsyncRelayCommand sendcommand, AsyncRelayCommand loginCommand, string clientColor)
+        public ChatInputViewmodel(AsyncRelayCommand<object?> sendcommand, AsyncRelayCommand<object?> loginCommand, string clientColor)
         {
             _userMessage = string.Empty;
             _clientColor = clientColor;
-            _sendcommand = sendcommand;
+            _sendCommand = sendcommand;
             _loginCommand = loginCommand;
         }
     }
@@ -960,56 +662,25 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 聊天服务端VM
     /// </summary>
-    public partial class ChatServerViewModel : NotificationObject
+    public partial class ChatServerViewModel : ObservableObject
     {
+        [ObservableProperty]
         private string _serverAddress;
-        public string ServerAddress
-        {
-            get => _serverAddress;
-            set
-            {
-                _serverAddress = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private int _serverPort;
-        public int ServerPort
-        {
-            get => _serverPort;
-            set
-            {
-                _serverPort = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private AsyncRelayCommand _createServerCommand;
-        public AsyncRelayCommand CreateServerCommand
-        {
-            get => _createServerCommand;
-            set
-            {
-                _createServerCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _createServerCommand;
 
+        [ObservableProperty]
         private bool _serverLock;
-        public bool ServerLock
-        {
-            get => _serverLock;
-            set
-            {
-                _serverLock = value;
-                NotifyPropertyChanged();
-            }
-        }
+
 
         /// <summary>
         /// 聊天服务端VM
         /// </summary>
-        public ChatServerViewModel(string serverAddress, int serverPort, AsyncRelayCommand createCommand)
+        public ChatServerViewModel(string serverAddress, int serverPort, AsyncRelayCommand<object?> createCommand)
         {
             _serverAddress = serverAddress;
             _serverPort = serverPort;
@@ -1021,67 +692,27 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 聊天客户端VM
     /// </summary>
-    public partial class ChatClientViewModel : NotificationObject
+    public partial class ChatClientViewModel : ObservableObject
     {
+        [ObservableProperty]
         private string _serverAddress;
-        public string ServerAddress
-        {
-            get => _serverAddress;
-            set
-            {
-                _serverAddress = value;
-                NotifyPropertyChanged();
-            }
-        }
 
+        [ObservableProperty]
         private string _serverPort;
-        public string ServerPort
-        {
-            get => _serverPort;
-            set
-            {
-                _serverPort = value;
-                NotifyPropertyChanged();
-            }
-        }
 
-        private AsyncRelayCommand _confirmCommand;
-        public AsyncRelayCommand ConfirmCommand
-        {
-            get => _confirmCommand;
-            set
-            {
-                _confirmCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _confirmCommand;
 
-        private AsyncRelayCommand _cancelCommand;
-        public AsyncRelayCommand CancelCommand
-        {
-            get => _cancelCommand;
-            set
-            {
-                _cancelCommand = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private AsyncRelayCommand<object?> _cancelCommand;
 
+        [ObservableProperty]
         private Visibility _confirmWindowVisibility;
-        public Visibility ConfirmWindowVisibility
-        {
-            get => _confirmWindowVisibility;
-            set
-            {
-                _confirmWindowVisibility = value;
-                NotifyPropertyChanged();
-            }
-        }
 
         /// <summary>
         /// 聊天客户端VM
         /// </summary>
-        public ChatClientViewModel(string loginServerAddress, string loginServerPort, AsyncRelayCommand loginConfirmCommand, AsyncRelayCommand loginCancelCommand)
+        public ChatClientViewModel(string loginServerAddress, string loginServerPort, AsyncRelayCommand<object?> loginConfirmCommand, AsyncRelayCommand<object?> loginCancelCommand)
         {
             _serverAddress = loginServerAddress;
             _serverPort = loginServerPort;
@@ -1094,20 +725,13 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// <summary>
     /// 本机代表VM
     /// </summary>
-    public partial class ChatRoomJoinerViewModel : NotificationObject
+    public partial class ChatRoomJoinerViewModel : ObservableObject
     {
         /// <summary>
         /// 设置或获取本机创建的服务端的名称
         /// </summary>
-        public string ServerName
-        {
-            get => _serverName;
-            set
-            {
-                _serverName = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ClientRealName))]
         private string _serverName;
 
         /// <summary>
@@ -1116,55 +740,28 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         public string ClientName
         {
             get => _clientName + _feature;
-            set
-            {
-                _clientName = value;
-                NotifyPropertyChanged();
-            }
+            init => SetProperty(ref _clientName, value);
         }
         private string _clientName;
 
         /// <summary>
         /// 本机roll到的颜色
         /// </summary>
-        public string ClientColor
-        {
-            get => _clientColor;
-            init
-            {
-                _clientColor = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private string _clientColor;
 
         /// <summary>
         /// 本机roll到的头像下标
         /// </summary>
-        public int ClientAvatarIdx
-        {
-            get => _clientAvatarIdx;
-            init
-            {
-                _clientAvatarIdx = value;
-                NotifyPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private int _clientAvatarIdx;
 
         /// <summary>
         /// 头像路径
         /// </summary>
+        [ObservableProperty]
         private string _clientAvatarPath;
-        public string ClientAvatarPath
-        {
-            get { return _clientAvatarPath; }
-            set
-            {
-                _clientAvatarPath = value;
-                NotifyPropertyChanged();
-            }
-        }
+
 
         /// <summary>
         /// 本机作为客户端时名称（原始）
@@ -1181,6 +778,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _clientName = clientName;
             _clientColor = clientColor;
             _clientAvatarIdx = clientAvatarIdx;
+            _clientAvatarPath = $"./Control/IconEx/{_clientAvatarIdx + 1:00}.png";
         }
 
         /// <summary>

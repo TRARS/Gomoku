@@ -32,24 +32,27 @@
                                        AutoReverse="False"
                                        FillBehavior="HoldEnd">
             <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-            <LinearDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
-            <LinearDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:2.0" Value="1"/>
+            <LinearDoubleKeyFrame KeyTime="0:0:3.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--不透明度蒙版-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
-                                        Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="-1"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:2.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-1"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0.75"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="-0.25"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:2.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-0.25"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:2.4" Value="1"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:3.0" Value="0"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:2.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
@@ -68,19 +71,22 @@
         </DoubleAnimationUsingKeyFrames>
         <!--不透明度蒙版-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
-                                        Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:3.2" Value="0"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:3.8" Value="-1"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:3.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-1"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:3.2" Value="0.75"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:3.8" Value="-0.25"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:3.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-0.25"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:3.4" Value="1"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:4.0" Value="0"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:3.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
@@ -99,19 +105,22 @@
         </DoubleAnimationUsingKeyFrames>
         <!--不透明度蒙版-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[0].Offset" 
-                                        Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:6.2" Value="0"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:6.8" Value="-1"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:6.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-1"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[1].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:6.2" Value="0.75"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:6.8" Value="-0.25"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:6.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0.75"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-0.25"/>
         </DoubleAnimationUsingKeyFrames>
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.OpacityMask).(LinearGradientBrush.GradientStops)[2].Offset" 
-                                       Storyboard.TargetName="contentGrid">
-            <EasingDoubleKeyFrame KeyTime="0:0:6.4" Value="1"/>
-            <EasingDoubleKeyFrame KeyTime="0:0:7.0" Value="0"/>
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:6.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">

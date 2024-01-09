@@ -56,7 +56,7 @@ namespace Gomoku.Core.Playground
         /// </summary>
         public async Task RemoveChessPiece(ChessPoint point)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             board[point.X, point.Y] = null;
         }
@@ -69,8 +69,6 @@ namespace Gomoku.Core.Playground
             await Task.CompletedTask;
 
             board[point.X, point.Y] = new ChessPiece { Row = point.X, Column = point.Y, Color = color };
-
-            //await Print($"落子: {point.X},{point.Y} ({color})");
         }
     }
 
@@ -158,7 +156,7 @@ namespace Gomoku.Core.Playground
         // 检查越界
         private async Task<bool> IsInBounds(int row, int column)
         {
-            await Task.Yield();
+            await Task.CompletedTask;
 
             return row >= 0 && row < board.GetLength(0) && column >= 0 && column < board.GetLength(1);
         }

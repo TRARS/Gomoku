@@ -91,7 +91,7 @@ namespace Gomoku.Core.Playground
 
                 // 游戏结束
                 await referee.DeclareGameEnd();
-                await onGameEnd(isGameAborted is false && isWinner);
+                await onGameEnd.Invoke(isGameAborted is false && isWinner);
             });
 
             await Task.CompletedTask;

@@ -83,7 +83,7 @@ namespace Gomoku.Core.Playground
 
                 // 游戏结束
                 await referee.DeclareGameEnd();
-                await onGameEnd(isWinner);
+                await onGameEnd.Invoke(isWinner);
             });
 
             await Task.CompletedTask;

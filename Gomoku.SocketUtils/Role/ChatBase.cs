@@ -142,22 +142,4 @@ namespace Gomoku.SocketUtils.Role
             return _deflateService.DecompressData(compressedData);
         }
     }
-
-    public partial class ChatBase
-    {
-        private Random random = new Random();
-        protected string GenerateRandomString(int length)
-        {
-            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
-            {
-                int index = random.Next(chars.Length);
-                stringBuilder.Append(chars[index]);
-            }
-
-            return stringBuilder.ToString();
-        }
-    }
 }
