@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using System;
-using System.Text;
-using System.Windows.Media.Media3D;
 
 namespace Gomoku.Core.Helper.Base
 {

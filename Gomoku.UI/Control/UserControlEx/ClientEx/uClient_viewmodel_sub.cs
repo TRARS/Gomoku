@@ -307,8 +307,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// </summary>
     public partial class MenuButtonGroupViewModel : ObservableObject
     {
-        [ObservableProperty]
-        public ObservableCollection<MenuButtonViewModel> menuVMList;
+        public ObservableCollection<MenuButtonViewModel> MenuVMList { get; init; }
 
         public MenuButtonGroupViewModel()
         {
@@ -337,7 +336,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private bool _enableHighLight;
 
         [ObservableProperty]
-        private AsyncRelayCommand<object?> _SoundCommand;
+        private AsyncRelayCommand<object?> _soundCommand;
 
 
         //private SoundPlayer? soundPlayer;
@@ -350,7 +349,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _margin = margin;
             _enableHighLight = enableHighLight;
             _visibility = visibility;
-            _SoundCommand = new(async para =>
+            _soundCommand = new(async para =>
             {
                 var path = type switch
                 {
@@ -365,7 +364,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                 //soundPlayer.Stream = sri.Stream;
                 //soundPlayer.Play();
 
-                await Task.Run(() =>
+                _ = Task.Run(() =>
                 {
                     using (var stream = new WaveStream(Application.GetResourceStream(new Uri(path)).Stream))
                     {
@@ -379,6 +378,8 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                         }
                     }
                 });
+
+                await Task.CompletedTask;
             });
         }
 
@@ -408,17 +409,18 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         [ObservableProperty]
         private Brush _chessBoardBackground;
 
+        [ObservableProperty]
+        public StoneViewModel tempStoneVM;
 
-        public StoneViewModel TempStoneVM { get; set; }
         public ObservableCollection<StoneViewModel> StoneVMList { get; init; }
 
         [ObservableProperty]
-        public AsyncRelayCommand<object?> mouseClickCommand;
+        public AsyncRelayCommand<object?> _mouseClickCommand;
 
         [ObservableProperty]
-        public AsyncRelayCommand<object?> mouseMoveCommand;
+        public AsyncRelayCommand<object?> _mouseMoveCommand;
 
-        public ChessBoardViewModel(double gridSize, double horizontalGridCount, double verticalGridCount)
+        public ChessBoardViewModel(double gridSize, double horizontalGridCount, double verticalGridCount, AsyncRelayCommand<object?> mouseClickCommand, AsyncRelayCommand<object?> mouseMoveCommand)
         {
             _gridSize = gridSize;
             _horizontalGridCount = horizontalGridCount;
@@ -426,6 +428,9 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
             _chessBoardBackground = CreateGridTile(gridSize, horizontalGridCount, verticalGridCount);
             _chessBoardSize = new(_gridSize * _horizontalGridCount, _gridSize * _verticalGridCount);
+
+            _mouseClickCommand = mouseClickCommand;
+            _mouseMoveCommand = mouseMoveCommand;
 
             StoneVMList = new();
         }
@@ -731,18 +736,23 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// 设置或获取本机创建的服务端的名称
         /// </summary>
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(ClientRealName))]
         private string _serverName;
 
         /// <summary>
         /// 设置或获取本机作为客户端时的名称（读取时带盐以防重复）
         /// </summary>
+        /// [NotifyPropertyChangedFor(nameof(ClientRealName))]
         public string ClientName
         {
             get => _clientName + _feature;
             init => SetProperty(ref _clientName, value);
         }
         private string _clientName;
+
+        /// <summary>
+        /// 本机作为客户端时名称（原始）
+        /// </summary>
+        public string ClientRealName => _clientName;
 
         /// <summary>
         /// 本机roll到的颜色
@@ -761,12 +771,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// </summary>
         [ObservableProperty]
         private string _clientAvatarPath;
-
-
-        /// <summary>
-        /// 本机作为客户端时名称（原始）
-        /// </summary>
-        public string ClientRealName => _clientName;
 
         /// <summary>
         /// 本机代表VM
@@ -798,7 +802,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// </summary>
         public string TryGetClientRealName(string name)
         {
-            if (name == _serverName) { return _serverName; } // 服务端名字没盐
+            if (name == ServerName) { return ServerName; } // 服务端名字没盐
 
             if (name.Length - _feature.Length > 0)
             {

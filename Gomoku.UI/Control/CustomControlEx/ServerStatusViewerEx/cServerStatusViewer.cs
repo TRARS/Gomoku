@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Gomoku.UI.Control.CustomControlEx.ServerStatusViewerEx
 {

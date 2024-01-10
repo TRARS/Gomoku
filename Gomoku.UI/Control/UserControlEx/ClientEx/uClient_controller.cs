@@ -91,9 +91,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         }
         private void ChessBoardViewModelInit()
         {
-            chessBoardVM = viewmodel.ChessBoardViewModel = new(gridSize, horizontalGridCount, verticalGridCount);
-            chessBoardVM.MouseClickCommand = new(MouseClick);
-            chessBoardVM.MouseMoveCommand = new(MouseMove);
+            chessBoardVM = viewmodel.ChessBoardViewModel = new(gridSize, horizontalGridCount, verticalGridCount, new(MouseClick), new(MouseMove));
             tempStoneVM = chessBoardVM.TempStoneVM = new(StoneType.RedStone, stoneSize / 2, new(0), false, Visibility.Collapsed);
 
             singlePlayMenuButtonGroupVM = viewmodel.SinglePlayMenuButtonGroupViewModel = new();
