@@ -96,7 +96,7 @@ namespace Gomoku.SocketUtils.Role
             StartState = StartState.None; return false;
         }
 
-        //
+        // サーバーを停止する
         public async Task StopListening()
         {
             if (StartState is StartState.Started)
@@ -178,7 +178,7 @@ namespace Gomoku.SocketUtils.Role
                         var loginReplyExPayload = new AdditionalPayload("#FFFF0000", 0)
                         {
                             ExMessageType = ExMessageType.SystemReply,
-                            ExMessage = $"{loginName}"
+                            ExMessage = $"{this.CharacterName}が貴方に注目✨"
                         };
                         var loginReply = JsonSerialize(new ClientMessage(base.CharacterName, loginName, loginMessage, loginReplyExPayload));
                         // 
@@ -231,6 +231,12 @@ namespace Gomoku.SocketUtils.Role
         {
             string key = client.RemoteEndPoint!.ToString()!;
             _socketMap.TryAdd(key, client);
+
+            var joiner = _userMapReverse[key];
+            {
+                this.BroadcastMessageToAllClients($"<{joiner}>上线了！", ExMessageType.SystemAlert);
+                this.BroadcastMessageToAllClients(string.Empty, ExMessageType.OnlineUsersCount, _socketMap.Count);
+            }
 
             // 端末からデータ受信を待ち受ける
             StateObject state = new StateObject();
@@ -386,10 +392,16 @@ namespace Gomoku.SocketUtils.Role
                 }
                 else
                 {
-                    _socketMap.Remove(address);
-                    _userMap.Remove(_userMapReverse[address]);
-                    _userMapReverse.Remove(address);
-                    Debug.WriteLine($"★server -> Client({address})が切断した");
+                    var exitor = _userMapReverse[address];
+                    {
+                        _socketMap.Remove(address);
+                        _userMap.Remove(_userMapReverse[address]);
+                        _userMapReverse.Remove(address);
+                        Debug.WriteLine($"★server -> Client({address})が切断した");
+
+                        this.BroadcastMessageToAllClients($"<{exitor}>下线了...", ExMessageType.SystemAlert);
+                        this.BroadcastMessageToAllClients(string.Empty, ExMessageType.OnlineUsersCount, _socketMap.Count);
+                    }
                 }
             }
             catch (Exception ex)
@@ -409,6 +421,32 @@ namespace Gomoku.SocketUtils.Role
             {
                 var jsonString = JsonSerialize(new ClientMessage(base.CharacterName, "親愛なるあなた", message, new("#FFFF0000", 0)));
                 byte[] byteData = Encoding.Unicode.GetBytes($"{jsonString}" + $"{EOF}");
+                server_to_client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(OnSpecificClientSendCallback), server_to_client);
+            }
+        }
+
+        // 服务端 主动群发 系统消息
+        private void BroadcastMessageToAllClients(string message, ExMessageType exType, object? exObj = null)
+        {
+            if (exType is not ExMessageType.SystemAlert && exType is not ExMessageType.OnlineUsersCount)
+            {
+                return;
+            }
+
+            var senderName = this.CharacterName;
+            var senderMessage = string.Empty;
+            var additionalPayload = new AdditionalPayload("#FFFF0000", 0)
+            {
+                ExMessageType = exType,
+                ExMessage = message,
+                ExObject = exObj
+            };
+
+            var jsonString = JsonSerialize(new ClientMessage(senderName, "親愛なるそなた", senderMessage, additionalPayload));
+            byte[] byteData = Encoding.Unicode.GetBytes($"{jsonString}" + $"{EOF}");
+
+            foreach (var server_to_client in _socketMap.Values)
+            {
                 server_to_client.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(OnSpecificClientSendCallback), server_to_client);
             }
         }

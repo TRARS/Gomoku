@@ -4,6 +4,7 @@
                     xmlns:pathbuttonex="clr-namespace:Gomoku.UI.Control.CustomControlEx.PathButtonEx">
 
     <local:cServerStatusViewer_converter_boolinverse x:Key="cServerStatusViewer_converter_boolinverse"/>
+    <local:cServerStatusViewer_converter_count2visibility x:Key="cServerStatusViewer_converter_count2visibility"/>
     
     <!--本体-->
     <Style TargetType="{x:Type local:cServerStatusViewer}">
@@ -21,22 +22,26 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
                             <Border Grid.ColumnSpan="4"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="{TemplateBinding BackgroundCornerRadius}"/>
+                                    Background="{TemplateBinding Background}"/>
 
                             <!--服务端地址-->
                             <TextBlock Grid.Column="0" 
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Center"
                                        Foreground="White"
+                                       FontSize="11"
                                        Margin="5,0,0,0">
                                     <Run Text="IP:" Foreground="DarkGray"/>
                             </TextBlock>
-
                             <TextBox x:Name="inputbox" 
                                      Grid.Column="1" 
+                                     FontSize="11"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" 
                                      VerticalContentAlignment="Center"
@@ -55,11 +60,11 @@
                             <TextBlock Grid.Column="2" 
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
+                                       FontSize="11"
                                        Margin="0,0,0,0">
                                     <Run Text="Port:" Foreground="DarkGray"/>
                                     <Run Text="{Binding ServerPort}" Foreground="White"/>
                             </TextBlock>
-
 
                             <!--启动按钮-->
                             <pathbuttonex:cPathButton x:Name="pathbtn"
@@ -71,6 +76,25 @@
                                                       PathData="M512 960c-247.424 0-448-200.512-448-448s200.576-448 448-448c247.488 0 448 200.512 448 448s-200.512 448-448 448zM512 138.88v-0.256C297.92 138.688 138.88 306.304 138.88 512S306.304 885.12 512 885.12s373.12-167.36 373.12-373.12S717.76 138.88 512 138.88z m-66.048 554.816a26.88 26.88 0 0 1-30.336 0.832 35.456 35.456 0 0 1-15.424-29.952V321.984c0-12.416 5.888-23.872 15.424-29.952a26.88 26.88 0 0 1 30.4 0.896l238.912 171.328c8.64 6.272 13.952 17.28 13.952 29.056s-5.312 22.784-14.016 28.992l-238.912 171.392z"
                                                       PathMargin="1"
                                                       Command="{Binding CreateServerCommand}"/>
+                            
+                            <!--在线人数-->
+                            <Grid Grid.Row="1" Grid.ColumnSpan="4"
+                                  Visibility="{Binding OnlineCount, Converter={StaticResource cServerStatusViewer_converter_count2visibility}}">
+                                <Border HorizontalAlignment="Stretch">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0" Opacity="0.3">
+                                            <GradientStop Color="Transparent" Offset="0.25"/>
+                                            <GradientStop Color="LightSlateGray"  Offset="0.5"/>
+                                            <GradientStop Color="Transparent" Offset="0.75"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                                <TextBlock Text="{Binding OnlineCount, StringFormat={}在线: {0}}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"
+                                           FontSize="10"/>
+                            </Grid>
                         </Grid>
                     </Border>
 

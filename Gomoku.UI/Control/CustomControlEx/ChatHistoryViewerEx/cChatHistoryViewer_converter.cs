@@ -103,4 +103,22 @@ namespace Gomoku.UI.Control.CustomControlEx.ChatHistoryViewerEx
             throw new NotImplementedException();
         }
     }
+
+    internal class cChatHistoryViewer_converter_actualheight2height : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (double.Parse($"{value}") > 0)
+            {
+                return value;
+            }
+
+            return Binding.DoNothing;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -407,7 +407,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private Point _chessBoardSize;
 
         [ObservableProperty]
-        private Brush _chessBoardBackground;
+        private Brush _chessBoardGrid;
 
         [ObservableProperty]
         public StoneViewModel tempStoneVM;
@@ -426,7 +426,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _horizontalGridCount = horizontalGridCount;
             _verticalGridCount = verticalGridCount;
 
-            _chessBoardBackground = CreateGridTile(gridSize, horizontalGridCount, verticalGridCount);
+            _chessBoardGrid = CreateGridTile(gridSize, horizontalGridCount, verticalGridCount);
             _chessBoardSize = new(_gridSize * _horizontalGridCount, _gridSize * _verticalGridCount);
 
             _mouseClickCommand = mouseClickCommand;
@@ -684,6 +684,9 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         [ObservableProperty]
         private bool _canShutdownServer;
 
+        [ObservableProperty]
+        private int _onlineCount;
+
         /// <summary>
         /// 聊天服务端VM
         /// </summary>
@@ -694,6 +697,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _createServerCommand = createCommand;
             _serverIsOnline = false;
             _canShutdownServer = false;
+            _onlineCount = 0;
         }
     }
 

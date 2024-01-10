@@ -85,6 +85,7 @@ namespace Gomoku.SocketUtils.Role
         Chat = 0,          //聊天消息
         SystemAlert,       //系统公告 ExMessage
         SystemReply,       //首登回复 ExMessage
+        OnlineUsersCount,  //在线人数 ExObject
         GameMatching,      //发起对战 ExObject
         GameConfirm,       //确认对战 ExObject
         GameInProgress,    //正在对战 ExObject

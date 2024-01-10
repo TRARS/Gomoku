@@ -324,6 +324,11 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             chatHistoryVM.SystemMessages.Add(new(obj.AdditionalPayload));
                             break;
                         }
+                    case ExMessageType.OnlineUsersCount:
+                        {
+                            chatServerVM.OnlineCount = int.Parse($"{obj.AdditionalPayload.ExObject}");
+                            break;
+                        }
                     case ExMessageType.GameMatching:
                         {
                             // 已开始对战时，拒收对战请求消息
@@ -526,17 +531,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                 flag = await chatClient.StartClient(address, _port, OnReceiveServerMessage);
             }
 
-            if (flag)
-            {
-                // 登录成功，发送一条系统消息。
-                var exPayload = new AdditionalPayload(chatRoomJoinerVM.ClientColor, chatRoomJoinerVM.ClientAvatarIdx)
-                {
-                    ExMessageType = ExMessageType.SystemAlert,
-                    ExMessage = $"<{chatRoomJoinerVM.ClientRealName}> 上线了！"
-                };
-                await chatClient.SendMessageToClient(chatRoomJoinerVM.ServerName, string.Empty, exPayload);
-            }
-            else
+            if (flag is false)
             {
                 MessageBox.Show("客户端启动失败。");
             }

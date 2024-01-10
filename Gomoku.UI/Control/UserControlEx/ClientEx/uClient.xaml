@@ -16,31 +16,6 @@
              MinWidth="200" 
              MinHeight="200"
              d:DataContext="{d:DesignInstance Type=local:uClient_viewmodel}">
-    <UserControl.Resources>
-        <DrawingBrush x:Key="GridTile"
-                  Stretch="None" 
-                  TileMode="Tile" 
-                  Viewport="0,0 32,32" 
-                  ViewportUnits="Absolute">
-            <!-- ^^^^^^^^^^^ set the size of the tile-->
-            <DrawingBrush.Drawing>
-                <GeometryDrawing>
-                    <GeometryDrawing.Geometry>
-                        <GeometryGroup>
-                            <LineGeometry StartPoint="0,0" EndPoint="32,0" />
-                            <LineGeometry StartPoint="32,0" EndPoint="32,32" />
-                            <LineGeometry StartPoint="32,32" EndPoint="0,32" />
-                            <LineGeometry StartPoint="0,32" EndPoint="0,0" />
-                        </GeometryGroup>
-                    </GeometryDrawing.Geometry>
-                    <GeometryDrawing.Pen>
-                        <!-- set color and thickness of lines -->
-                        <Pen Thickness="1" Brush="Gray"/>
-                    </GeometryDrawing.Pen>
-                </GeometryDrawing>
-            </DrawingBrush.Drawing>
-        </DrawingBrush>
-    </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -53,7 +28,7 @@
         <Border Grid.Column="0" d:Background="#5CD4C4">
             <Border Width="200" 
                     Height="{Binding ActualHeight, ElementName=ChessBorderArea}"
-                    Margin="5,5,0,5"
+                    Margin="5"
                     Background="Transparent"
                     BorderBrush="Transparent" 
                     BorderThickness="1"
@@ -114,16 +89,16 @@
         </Border>
     
         <!--棋盘-->
-        <Border Grid.Column="1" d:Background="#DBDBDB">
+        <Border Grid.Column="1" d:Background="#FFEB47">
             <Border x:Name="ChessBorderArea"
-                    Margin="5,5,0,5"
+                    Margin="0,5,0,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
                 <Grid Background="Transparent">
                     <chessboardex:cChessBoard DataContext="{Binding ChessBoardViewModel}"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
-                                              d:Width="448" d:Height="448" d:Background="{StaticResource GridTile}"
+                                              d:Width="448" d:Height="448"
                                               Background="LightSlateGray"
                                               BorderThickness="1"
                                               ChessBoardCornerRadius="5"

@@ -20,7 +20,7 @@
                                     CornerRadius="{TemplateBinding ChessBoardCornerRadius}"/>
 
                             <!--网格-->
-                            <Border Background="{Binding ChessBoardBackground}"
+                            <Border Background="{Binding ChessBoardGrid}"
                                     Width="{Binding ChessBoardSize.X}"
                                     Height="{Binding ChessBoardSize.Y}"
                                     CornerRadius="5"

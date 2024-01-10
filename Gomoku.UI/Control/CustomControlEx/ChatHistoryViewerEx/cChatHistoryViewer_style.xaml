@@ -10,7 +10,8 @@
     <local:cChatHistoryViewer_converter_textblock_textlimit x:Key="cChatHistoryViewer_converter_textblock_textlimit"/>
     <local:cChatHistoryViewer_converter_solidcolorbrush2color x:Key="cChatHistoryViewer_converter_solidcolorbrush2color"/>
     <local:cChatHistoryViewer_converter_textblock_maxwidth x:Key="cChatHistoryViewer_converter_textblock_maxwidth"/>
-
+    <local:cChatHistoryViewer_converter_actualheight2height x:Key="cChatHistoryViewer_converter_actualheight2height"/>
+    
     <!--FontSizs: 用户名、说话内容、系统消息、对战消息-->
     <DoubleCollection x:Key = "doubleCollection">12 11 10 11</DoubleCollection>
     
@@ -25,7 +26,8 @@
             <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
         </DoubleAnimationUsingKeyFrames>
     </Storyboard>
-    <!--通用contentGrid淡出动画 2秒-->
+    
+    <!--系统消息contentGrid淡出动画 2+1.2秒-->
     <Storyboard x:Key="FadeOutAnimation2s">
         <!--不透明度-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
@@ -55,11 +57,21 @@
             <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
-        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-            <DiscreteObjectKeyFrame KeyTime="0:0:3" Value="{x:Static Visibility.Collapsed}"/>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)" 
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:3.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <PowerEase  EasingMode="EaseIn"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"
+                                       BeginTime="0:0:3.2">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="{x:Static Visibility.Collapsed}"/>
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
-    <!--通用contentGrid淡出动画 3秒-->
+    <!--对战消息contentGrid淡出动画 3+1.2秒-->
     <Storyboard x:Key="FadeOutAnimation3s">
         <!--不透明度-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
@@ -89,11 +101,21 @@
             <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
-        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-            <DiscreteObjectKeyFrame KeyTime="0:0:4" Value="{x:Static Visibility.Collapsed}"/>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)" 
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:4.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <PowerEase  EasingMode="EaseIn"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"
+                                       BeginTime="0:0:4.2">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="{x:Static Visibility.Collapsed}"/>
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
-    <!--通用contentGrid淡出动画 6秒-->
+    <!--结算消息contentGrid淡出动画 6+1.2秒-->
     <Storyboard x:Key="FadeOutAnimation6s">
         <!--不透明度-->
         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
@@ -123,8 +145,18 @@
             <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="0"/>
         </DoubleAnimationUsingKeyFrames>
         <!--彻底消失-->
-        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-            <DiscreteObjectKeyFrame KeyTime="0:0:7" Value="{x:Static Visibility.Collapsed}"/>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Height)" 
+                                       Storyboard.TargetName="contentGrid"
+                                       BeginTime="0:0:7.0">
+            <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
+                <EasingDoubleKeyFrame.EasingFunction>
+                    <PowerEase  EasingMode="EaseIn"/>
+                </EasingDoubleKeyFrame.EasingFunction>
+            </EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"
+                                       BeginTime="0:0:7.2">
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="{x:Static Visibility.Collapsed}"/>
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
     
@@ -306,14 +338,15 @@
                 </Style.Triggers>
             </Style>
 
-            <!--额外消息气泡-->
+            <!--系统消息气泡-->
             <Style x:Key="SystemMessagesContentPresenterStyle" TargetType="ContentPresenter">
                 <Style.Resources>
                     <!--系统消息/登录消息 通用模板-->
                     <DataTemplate x:Key="ExPayloadTemplate">
                         <Grid x:Name="contentGrid"
+                              Height="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource cChatHistoryViewer_converter_actualheight2height}, Mode=OneWay}"
                               Background="#D9000000"
-                              attached:UIElementHelper.CountdownToRemoveAttached="3000"
+                              attached:UIElementHelper.CountdownToRemoveAttached="3200"
                               attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
                                                                                            RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
                             <Grid.OpacityMask>
@@ -383,8 +416,9 @@
                     <!--对战请求/对战确认气泡-->
                     <DataTemplate x:Key="GameMatchingExPayloadTemplate">
                         <Grid x:Name="contentGrid"
+                              Height="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource cChatHistoryViewer_converter_actualheight2height}, Mode=OneWay}"
                               Background="#151515"
-                              attached:UIElementHelper.CountdownToRemoveAttached="4000"
+                              attached:UIElementHelper.CountdownToRemoveAttached="4200"
                               attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
                                                                                            RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
                             <Grid.OpacityMask>
@@ -461,7 +495,11 @@
                     <!--对战中气泡-->
                     <DataTemplate x:Key="GameInProgressExPayloadTemplate">
                         <Grid x:Name="contentGrid"
-                              Background="#151515">
+                              Height="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource cChatHistoryViewer_converter_actualheight2height}, Mode=OneWay}"
+                              Background="#151515"
+                              attached:UIElementHelper.CountdownToRemoveAttached="4200"
+                              attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
+                                                                                           RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
 
                             <Border VerticalAlignment="Center"
                                     Margin="5,0,0,0">
@@ -513,8 +551,9 @@
                     <!--结算气泡-->
                     <DataTemplate x:Key="WinnerAlertExPayloadTemplate">
                         <Grid x:Name="contentGrid"
+                              Height="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource cChatHistoryViewer_converter_actualheight2height}, Mode=OneWay}"
                               Background="#151515"
-                              attached:UIElementHelper.CountdownToRemoveAttached="7000"
+                              attached:UIElementHelper.CountdownToRemoveAttached="7200"
                               attached:UIElementHelper.AlternationIndexAttached="{Binding (ItemsControl.AlternationIndex), 
                                                                                            RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
                             <Grid.OpacityMask>
@@ -666,7 +705,7 @@
                                     <StaticResource ResourceKey="WinnerMessagesContentPresenterStyle"/>
                                 </ItemsControl.ItemContainerStyle>
                             </ItemsControl>
-                            
+
                         </Grid>
                     </Border>
                 </ControlTemplate>
