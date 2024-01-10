@@ -679,8 +679,10 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private AsyncRelayCommand<object?> _createServerCommand;
 
         [ObservableProperty]
-        private bool _serverLock;
+        private bool _serverIsOnline;
 
+        [ObservableProperty]
+        private bool _canShutdownServer;
 
         /// <summary>
         /// 聊天服务端VM
@@ -690,7 +692,8 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             _serverAddress = serverAddress;
             _serverPort = serverPort;
             _createServerCommand = createCommand;
-            _serverLock = false;
+            _serverIsOnline = false;
+            _canShutdownServer = false;
         }
     }
 

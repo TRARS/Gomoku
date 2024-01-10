@@ -458,33 +458,43 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         /// </summary>
         private async Task StartServer(object? args)
         {
-            if (chatServerVM.ServerPort > 0)
+            _ = Task.Run(async () =>
             {
-                Debug.WriteLine("服务端已启动");
-            }
-            else
-            {
-                var address = chatServerVM.ServerAddress;
-                var port = chatServerVM.ServerPort;
-                var flag = await chatServer.StartListening(address, port, (port) =>
+                if (chatServerVM.ServerIsOnline)
                 {
-                    chatServerVM.ServerPort = port;
-                    chatServerVM.ServerLock = true;
+                    await chatServer.StopListening();
 
-                    chatClientVM.ServerAddress = address;
-                    chatClientVM.ServerPort = $"{port}";
-                });
+                    chatServerVM.ServerPort = 0;
+                    chatServerVM.ServerIsOnline = false;
 
-                if (flag is false)
-                {
-                    IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
-                    var ipv4 = localIPs.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(x => x);
-                    var info = string.Join(",\n", ipv4);
-                    await Task.Run(() => MessageBox.Show($"创建服务端失败，请填入正确本机IP。\n本机局域网IP地址列表:\n{info}"));
-
-                    chatServerVM.ServerLock = false;
+                    Debug.WriteLine("服务端已关闭");
                 }
-            }
+                else
+                {
+                    var address = chatServerVM.ServerAddress;
+                    var port = chatServerVM.ServerPort;
+                    var flag = await chatServer.StartListening(address, port, (port) =>
+                    {
+                        chatServerVM.ServerPort = port;
+                        chatServerVM.ServerIsOnline = true;
+
+                        chatClientVM.ServerAddress = address;
+                        chatClientVM.ServerPort = $"{port}";
+                    });
+
+                    if (flag is false)
+                    {
+                        IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+                        var ipv4 = localIPs.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Select(x => x);
+                        var info = string.Join(",\n", ipv4);
+                        await Task.Run(() => MessageBox.Show($"创建服务端失败，请填入正确本机IP。\n本机局域网IP地址列表:\n{info}"));
+
+                        chatServerVM.ServerIsOnline = false;
+                    }
+                }
+            });
+
+            await Task.CompletedTask;
         }
 
         /// <summary>

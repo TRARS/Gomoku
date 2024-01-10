@@ -48,7 +48,7 @@
                                      CaretBrush="OrangeRed"
                                      Text="{Binding ServerAddress}"
                                      Margin="0,0,5,0"
-                                     IsHitTestVisible="{Binding ServerLock, Converter={StaticResource cServerStatusViewer_converter_boolinverse}}">
+                                     IsHitTestVisible="{Binding ServerIsOnline, Converter={StaticResource cServerStatusViewer_converter_boolinverse}}">
                             </TextBox>
 
                             <!--服务端端口-->
@@ -75,13 +75,13 @@
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding ServerLock}" Value="False">
+                        <DataTrigger Binding="{Binding ServerIsOnline}" Value="False">
                             <DataTrigger.Setters>
                                 <Setter Property="Background" Value="#A1000000" TargetName="inputbox"/>
                             </DataTrigger.Setters>
                         </DataTrigger>
 
-                        <DataTrigger Binding="{Binding ServerLock}" Value="True">
+                        <DataTrigger Binding="{Binding ServerIsOnline}" Value="True">
                             <DataTrigger.Setters>
                                 <Setter Property="Opacity" Value="0.5" TargetName="pathbtn"/>
                                 <Setter Property="PathColor" Value="Red" TargetName="pathbtn"/>
@@ -89,6 +89,16 @@
                                         TargetName="pathbtn"/>
                             </DataTrigger.Setters>
                         </DataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ServerIsOnline}" Value="True"/>
+                                <Condition Binding="{Binding CanShutdownServer}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="IsHitTestVisible" Value="False" TargetName="pathbtn"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

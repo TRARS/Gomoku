@@ -32,6 +32,7 @@ namespace Gomoku.SocketUtils.Role
         Started = 0,
         Starting,
         StartFalse,
+        Stopped,
         None
     }
 

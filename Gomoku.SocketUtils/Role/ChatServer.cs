@@ -15,6 +15,9 @@ namespace Gomoku.SocketUtils.Role
         //SemaphoreSlimのインスタンスを生成
         private readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(0, 1);
 
+        //
+        private Socket serverSocket;
+
         //字典，新客户端连接时，往 _socketMap 添加该客户端
         private Dictionary<string, Socket> _socketMap = new();     // address -> Socket  3.
         private Dictionary<string, string> _userMap = new();       // name -> address    1.
@@ -32,7 +35,7 @@ namespace Gomoku.SocketUtils.Role
         // TCP/IPの接続開始処理
         public async Task<bool> StartListening(string address, int port, Action<int> port_act)
         {
-            if (StartState == StartState.Started || StartState == StartState.Starting) { return true; }
+            if (StartState is StartState.Started || StartState is StartState.Starting) { return true; }
 
             // 始まるんだ
             StartState = StartState.Starting;
@@ -43,12 +46,12 @@ namespace Gomoku.SocketUtils.Role
                 IPEndPoint localEndPoint = new IPEndPoint(validaddress, port);
 
                 // TCP/IPのソケットを作成
-                Socket TcpServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                Socket TcpServer = serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
                 //
                 int retryCount = 0;
 
-                while (true)
+                while (StartState is not StartState.Stopped)
                 {
                     if (retryCount++ > 10)
                     {
@@ -67,7 +70,7 @@ namespace Gomoku.SocketUtils.Role
 
                         await Task.Run(() =>
                         {
-                            while (true)
+                            while (StartState is StartState.Started)
                             {
                                 // 非同期ソケットを開始して、接続をリッスンする
                                 Debug.WriteLine("★server -> 接続待機中...");
@@ -85,24 +88,59 @@ namespace Gomoku.SocketUtils.Role
                 }
             }
 
+            if (StartState is StartState.Stopped)
+            {
+                return true;
+            }
+
             StartState = StartState.None; return false;
+        }
+
+        //
+        public async Task StopListening()
+        {
+            if (StartState is StartState.Started)
+            {
+                StartState = StartState.Stopped;
+
+                foreach (var client in _socketMap.Values)
+                {
+                    client.Close();
+                }
+
+                serverSocket.Close();
+
+                _socketMap.Clear();
+                _userMap.Clear();
+                _userMapReverse.Clear();
+
+                semaphoreSlim.Release();
+            }
+
+            await Task.CompletedTask;
         }
 
         private void InitAcceptCallback(IAsyncResult ar)
         {
-            // シグナル状態にし、メインスレッドの処理を続行する
-            semaphoreSlim.Release();
+            try
+            {
+                if (StartState is StartState.Stopped) { return; }
 
-            // クライアント要求を処理するソケットを取得
-            Socket TcpServer = (Socket)ar.AsyncState;
-            Socket TcpClient = TcpServer.EndAccept(ar);
+                // シグナル状態にし、メインスレッドの処理を続行する
+                semaphoreSlim.Release();
 
-            Debug.WriteLine($"★server -> Client({TcpClient.RemoteEndPoint})が接続した");
+                // クライアント要求を処理するソケットを取得
+                Socket TcpServer = (Socket)ar.AsyncState;
+                Socket TcpClient = TcpServer.EndAccept(ar);
 
-            // 端末からデータ受信を待ち受ける
-            StateObject state = new StateObject();
-            state.workSocket = TcpClient;
-            TcpClient.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(InitReceiveCallback), state);
+                Debug.WriteLine($"★server -> Client({TcpClient.RemoteEndPoint})が接続した");
+
+                // 端末からデータ受信を待ち受ける
+                StateObject state = new StateObject();
+                state.workSocket = TcpClient;
+                TcpClient.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(InitReceiveCallback), state);
+            }
+            catch { }
         }
         private void InitReceiveCallback(IAsyncResult ar)
         {
