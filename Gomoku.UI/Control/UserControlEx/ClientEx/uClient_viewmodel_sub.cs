@@ -25,7 +25,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     {
         private object lockObject = new object();
         private int maxItemCount = 20;
-        private int itemsToRemove = 12;
+        private int countToRemove = 12;
 
         /// <summary>
         /// 常规Add
@@ -36,7 +36,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             {
                 if (Count >= maxItemCount)
                 {
-                    for (int i = 0; i < itemsToRemove; i++)
+                    for (int i = 0; i < countToRemove; i++)
                     {
                         base.RemoveAt(0);
                     }
@@ -48,7 +48,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         public LimitedSizeObservableCollection(int _maxItemCount, int _countToRemove)
         {
             maxItemCount = Math.Clamp(_maxItemCount, 2, int.MaxValue);
-            itemsToRemove = Math.Clamp(_countToRemove, 1, _maxItemCount);
+            countToRemove = Math.Clamp(_countToRemove, 1, _maxItemCount);
         }
     }
 
@@ -504,9 +504,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     public partial class ChatMessageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private bool _Dequeue;
-
-        [ObservableProperty]
         public bool _isOwnMessage;
 
         [ObservableProperty]
@@ -548,9 +545,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     public partial class SystemMessageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private bool _Dequeue;
-
-        [ObservableProperty]
         private AdditionalPayload _exPayload;
 
 
@@ -579,9 +573,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     public partial class GameMessageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private bool _Dequeue;
-
-        [ObservableProperty]
         private AdditionalPayload _exPayload;
 
         [ObservableProperty]
@@ -601,9 +592,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
     /// </summary>
     public partial class WinnerMessagesViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private bool _Dequeue;
-
         [ObservableProperty]
         private AdditionalPayload _exPayload;
 

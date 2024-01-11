@@ -1,25 +1,25 @@
 ﻿using Gomoku.Core.Rule;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gomoku.Core.Playground.Interface
 {
+    /// <summary>
+    /// 广场接口
+    /// </summary>
     public interface IPlayground
     {
-        ChessPieceColor MyColor { get; set; }
-        bool IsGameNotStarted { get; }
-        bool IsMyTurn { get; }
+        bool GameIsRunning { get; }
 
-        Task<ChessPieceColor> CursorClick(ChessPoint pt);
-        Task<ChessMoveStatus> CursorMove(ChessPoint pt);
+        Task<ChessPieceColor> GetCurrentPlayerColor();
+        Task<ChessMoveStatus> VirtualMove(ChessPoint pt);
 
         Task StartGame(int boardWidth, int boardHeight, Func<bool, Task> onGameEnd);
         Task StopGame();
         Task<bool> UndoMove();
 
-        Task<ChessPoint> MultiPlayChooseMove(CancellationToken token);
-        Task SetMultiPlayChessPoint(ChessPoint pt);
-        Task SetMultiPlayChessColor(ChessPieceColor color);
+        //Task<ChessPoint> WaitForMove(CancellationToken token);
+        Task SetSelectedMove(ChessPoint pt);
+        Task SetPlayerColor(ChessPieceColor color);
     }
 }

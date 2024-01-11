@@ -5,23 +5,22 @@ namespace Gomoku.Core.Rule
     /// <summary>
     /// 游戏状态
     /// </summary>
-    internal enum GameStatus
+    public enum GameStatus
     {
         NotStarted,         // 游戏尚未开始
         InProgress,         // 游戏正在进行中
-        //Ended,              // 游戏已结束
-        //Paused              // 游戏暂停中
     }
 
     /// <summary>
     /// 游戏状态（每回合结束时）
     /// </summary>
-    internal enum GameResult
+    public enum GameResult
     {
         BlackWins, // 黑棋胜
         WhiteWins, // 白棋胜
         Draw,      // 平局
-        None       // 无事发生
+        None,      // 无事发生
+        Unknown    // 未知
     }
 
     /// <summary>

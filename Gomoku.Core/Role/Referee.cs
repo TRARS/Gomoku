@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace Gomoku.Core.Role
 {
-    internal partial class Referee
+    public partial class Referee
     {
         private CancellationTokenSource undoMoveCancellationTokenSource;
         private CancellationTokenSource gameCancellationCancellationTokenSource;
@@ -21,8 +21,18 @@ namespace Gomoku.Core.Role
         private Size chessboardSize;
         private List<DropPieceInfo> gameFlow;
         private GameStatus gameStatus;
+        private GameResult gameResult;
         private Player currentPlayer;
         private ChessPieceColor currentPlayerColor;
+
+        private Dictionary<GameResult, string> resultMap = new()
+        {
+            { GameResult.BlackWins, "黑棋胜" },
+            { GameResult.WhiteWins, "白棋胜" },
+            { GameResult.Draw, "平局" },
+            { GameResult.None, "继续..." },
+            { GameResult.Unknown, "未知状态" },
+        };
 
         public Referee(Size _chessboardSize)
         {
@@ -30,20 +40,26 @@ namespace Gomoku.Core.Role
             chessboard = new(chessboardSize);
             gameFlow = new();
             gameStatus = GameStatus.NotStarted;
+            gameResult = GameResult.Unknown;
             currentPlayerColor = ChessPieceColor.None;
 
             _ = Print($"棋盘尺寸 = {chessboardSize.Width} x {chessboardSize.Height}");
         }
     }
 
-    internal partial class Referee
+    public partial class Referee
     {
         public bool IsGameNotStarted => this.gameStatus != GameStatus.InProgress;
-        public ChessPieceColor CurrentPlayerColor => currentPlayerColor;
-        public ChessPieceColor WinnerColor => this.gameStatus != GameStatus.InProgress ? currentPlayerColor : ChessPieceColor.None;
+        public ChessPieceColor CurrentPlayerColor => this.currentPlayerColor;
+        public ChessPieceColor WinnerPlayerColor => this.gameResult switch
+        {
+            GameResult.BlackWins => ChessPieceColor.Black,
+            GameResult.WhiteWins => ChessPieceColor.White,
+            _ => ChessPieceColor.None
+        };
     }
 
-    internal partial class Referee
+    public partial class Referee
     {
         // 查询游戏状态
         public async Task<GameStatus> CheckGameStatus()
@@ -81,7 +97,7 @@ namespace Gomoku.Core.Role
         }
 
         // 强制要求玩家落子，并实现判断输赢
-        public async Task<bool> GrantPlayerTurn(Player player)
+        public async Task<GameResult> GrantPlayerTurn(Player player)
         {
             // 设置颜色
             SetCurrentPlayer(player);
@@ -102,14 +118,14 @@ namespace Gomoku.Core.Role
                         var gameCancelToken = gameCancellationCancellationTokenSource.Token;
                         var undoMoveToken = undoMoveCancellationTokenSource.Token;
 
-                        // 获取玩家选择的棋子落点
+                        // 等待玩家选择棋子落点
                         var currentMove = await player.ChooseMove.Invoke(undoMoveToken);
 
                         // 可能取消游戏
-                        if (gameCancelToken.IsCancellationRequested) { return false; }
+                        if (gameCancelToken.IsCancellationRequested) { SetGameResult(GameResult.Unknown); return gameResult; }
 
                         // 可能悔棋
-                        if (undoMoveToken.IsCancellationRequested) { return true; }
+                        if (undoMoveToken.IsCancellationRequested) { SetGameResult(GameResult.None); return gameResult; }
 
                         // 检测落点合理性
                         if (await chessboard.CheckMoveValid(currentMove) is false) { continue; }
@@ -118,14 +134,11 @@ namespace Gomoku.Core.Role
                         await RecordChessMove(currentMove, player.Color);
 
                         // 检测五连珠
-                        switch (await chessboard.CheckWin(player.Color, currentMove))
-                        {
-                            case GameResult.BlackWins: await Print("黑棋胜\n"); return false;
-                            case GameResult.WhiteWins: await Print("白棋胜\n"); return false;
-                            case GameResult.Draw: await Print("平局\n"); return false;
-                            case GameResult.None: await Print("继续...\n"); return true;
-                            default: await Print("未知游戏状态\n"); return true;
-                        }
+                        SetGameResult(await chessboard.CheckWin(player.Color, currentMove));
+
+                        await Print(resultMap[gameResult]);
+
+                        return gameResult;
                     }
                 }
                 catch { }
@@ -144,6 +157,7 @@ namespace Gomoku.Core.Role
             await Print("游戏结束 & 棋盘复位\n");
             ResetChessboard();
             SetGameStatus(GameStatus.NotStarted);
+            SetGameResult(GameResult.Unknown);
         }
 
         // 终止游戏
@@ -168,7 +182,7 @@ namespace Gomoku.Core.Role
         }
     }
 
-    internal partial class Referee
+    public partial class Referee
     {
         // 打印方法
         private async Task Print(string str)
@@ -184,6 +198,12 @@ namespace Gomoku.Core.Role
             gameStatus = status;
         }
 
+        // 裁判设置游戏状态
+        private void SetGameResult(GameResult result)
+        {
+            gameResult = result;
+        }
+
         // 裁判设置颜色
         private void SetCurrentPlayer(Player player)
         {
@@ -194,8 +214,7 @@ namespace Gomoku.Core.Role
         // 裁判撤销落子
         private async Task UndoLastMove()
         {
-            var lastItem = gameFlow.LastItem();
-            if (lastItem is not null)
+            if (gameFlow.LastItem() is DropPieceInfo lastItem)
             {
                 await chessboard.RemoveChessPiece(lastItem.Pos);
                 gameFlow.RemoveLastItem();
@@ -225,18 +244,18 @@ namespace Gomoku.Core.Role
     }
 
     // 供Playground操作的方法
-    internal partial class Referee
+    public partial class Referee
     {
-        //裁判代落子
-        public async Task<ChessPieceColor> CursorClick(ChessPoint pt)
+        //裁判示意可落子玩家棋子颜色
+        public async Task<ChessPieceColor> GetCurrentPlayerColor()
         {
-            await currentPlayer.ConfirmPlace.Invoke(pt);
+            await Task.CompletedTask;
 
             return currentPlayer.Color;
         }
 
         //裁判判断是否允许落子
-        public async Task<ChessMoveStatus> CursorMove(ChessPoint pt)
+        public async Task<ChessMoveStatus> VirtualMove(ChessPoint pt)
         {
             var flag = await chessboard.CheckMoveValid(pt);
 

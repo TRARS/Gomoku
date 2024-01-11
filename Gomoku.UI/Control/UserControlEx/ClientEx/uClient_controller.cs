@@ -18,7 +18,7 @@ using System.Windows.Media;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using MenuType = Gomoku.UI.Control.CustomControlEx.MenuButtonEx.ButtonType;
 using MultiPlayground = Gomoku.Core.Playground.MultiPlayground;
-using Playground = Gomoku.Core.Playground.Playground;
+using SinglePlayground = Gomoku.Core.Playground.SinglePlayground;
 using StoneType = Gomoku.UI.Control.CustomControlEx.StoneButtonEx.ButtonType;
 
 
@@ -39,7 +39,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         public uClient_controller(uClient_viewmodel vm)
         {
             viewmodel = vm;
-            playground = Playground.Instance;
+            playground = SinglePlayground.Instance;
             matchHelper = MatchHelper.Instance;
 
             roll = RandomizeCharacter();
@@ -124,7 +124,6 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         private async Task UndoMove(object? args)
         {
             if (playground is MultiPlayground) { return; }
-            if (playground.IsGameNotStarted) { return; }
 
             if (await playground.UndoMove() is false) { return; }
 
@@ -138,7 +137,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
         // 单机联机通用拿坐标方法
         private async Task MouseClick(object? para)
         {
-            if (playground.IsGameNotStarted) { return; }
+            if (playground.GameIsRunning is false) { return; }
 
             Point relativePoint = Mouse.GetPosition((IInputElement)para!);
             double x = relativePoint.X;
@@ -151,9 +150,9 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                 var chessPoint = new ChessPoint(nx, ny);
 
-                if (await playground.CursorMove(chessPoint) is not ChessMoveStatus.Forbidden)
+                if (await playground.VirtualMove(chessPoint) is not ChessMoveStatus.Forbidden)
                 {
-                    var type = (await playground.CursorClick(chessPoint)) switch
+                    var type = (await playground.GetCurrentPlayerColor()) switch
                     {
                         ChessPieceColor.Black => StoneType.BlackStone,
                         ChessPieceColor.White => StoneType.WhiteStone,
@@ -161,15 +160,14 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                     };
                     var diameter = stoneSize;
                     var radius = diameter / 2;
-
                     chessBoardVM.StoneVMList.LastItem()?.SetHighLight(false);
                     chessBoardVM.StoneVMList.Add(new(type, diameter, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
-
                     tempStoneVM.Type = StoneType.RedStone;
+
+                    await playground.SetSelectedMove(chessPoint); // 己方落子
 
                     if (matchHelper.IsInGameProgress)
                     {
-                        await playground.SetMultiPlayChessPoint(chessPoint); // 己方落子
                         await this.MultiPlayMouseClick(chessPoint);          // 落子消息发送给对方
                     }
                 }
@@ -190,13 +188,13 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                 int nx = (int)((x - gridSize / 2) / gridSize);
                 int ny = (int)((y - gridSize / 2) / gridSize);
 
-                if (playground.IsGameNotStarted)
+                if (playground.GameIsRunning is false)
                 {
                     tempStoneVM.Type = StoneType.RedStone;
                 }
                 else
                 {
-                    switch (await playground.CursorMove(new(nx, ny)))
+                    switch (await playground.VirtualMove(new(nx, ny)))
                     {
                         case ChessMoveStatus.Forbidden:
                             {
@@ -403,25 +401,24 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             Task.Run(async () =>
                             {
                                 var chessPoint = matchObject.ChessPoint;
-
-                                var type = (await playground.CursorClick(chessPoint)) switch
                                 {
-                                    ChessPieceColor.Black => StoneType.BlackStone,
-                                    ChessPieceColor.White => StoneType.WhiteStone,
-                                    _ => throw new NotImplementedException()
-                                };
-                                var diameter = stoneSize;
-                                var radius = diameter / 2;
+                                    var type = (await playground.GetCurrentPlayerColor()) switch
+                                    {
+                                        ChessPieceColor.Black => StoneType.BlackStone,
+                                        ChessPieceColor.White => StoneType.WhiteStone,
+                                        _ => throw new NotImplementedException()
+                                    };
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        var diameter = stoneSize;
+                                        var radius = diameter / 2;
+                                        chessBoardVM.StoneVMList.LastItem()?.SetHighLight(false);
+                                        chessBoardVM.StoneVMList.Add(new(type, diameter, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
+                                        tempStoneVM.Type = StoneType.RedStone;
+                                    });
 
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    chessBoardVM.StoneVMList.LastItem()?.SetHighLight(false);
-                                    chessBoardVM.StoneVMList.Add(new(type, diameter, new((chessPoint.X + 1) * gridSize - radius, (chessPoint.Y + 1) * gridSize - radius, 0, 0), true));
-
-                                    tempStoneVM.Type = StoneType.RedStone;
-                                });
-
-                                await playground.SetMultiPlayChessPoint(chessPoint);
+                                    await playground.SetSelectedMove(chessPoint); // 对方落子
+                                }
                             });
 
                             // 展示落子坐标
@@ -768,7 +765,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                 // 回归单机广场
                 matchHelper.IsInMatchingGame = true;
-                playground = Playground.Instance;
+                playground = SinglePlayground.Instance;
             }
         }
 
@@ -888,10 +885,10 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                     // 对战结束，改回单机广场
                     matchHelper.IsInMatchingGame = true;
-                    playground = Playground.Instance;
+                    playground = SinglePlayground.Instance;
                 });
             });
-            await playground.SetMultiPlayChessColor(color);
+            await playground.SetPlayerColor(color);
 
             Debug.WriteLine(color);
         }
