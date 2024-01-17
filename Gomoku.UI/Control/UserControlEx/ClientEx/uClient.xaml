@@ -40,13 +40,13 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="32"/>
                     </Grid.RowDefinitions>
-                
+
                     <!--服务端地址-->
                     <serverstatusviewerex:cServerStatusViewer Grid.Row="1"
                                                               Background="#414854"
                                                               DataContext="{Binding ChatServerViewModel}"
                                                               Margin="0,1,0,1"/>
-                
+
                     <!--聊天记录浏览器-->
                     <chathistoryviewerex:cChatHistoryViewer Grid.Row="2" 
                                                             DataContext="{Binding ChatHistoryViewModel}"
@@ -87,7 +87,7 @@
                 </Grid>
             </Border>
         </Border>
-    
+
         <!--棋盘-->
         <Border Grid.Column="1" d:Background="#FFEB47">
             <Border x:Name="ChessBorderArea"
@@ -106,7 +106,7 @@
                 </Grid>
             </Border>
         </Border>
-        
+
         <!--按钮组-->
         <Grid Grid.Column="2" d:Background="#584A5F">
             <Grid Margin="0,5,0,5">
@@ -121,7 +121,7 @@
                                                     DataContext="{Binding SinglePlayMenuButtonGroupViewModel}"
                                                     MenuButtons="{Binding MenuVMList}"
                                                     d:MenuButtons="{d:SampleData ItemCount=3}"/>
-            
+
                 <StackPanel Grid.Row="1">
                     <stonebuttonex:cStoneButton Type="BlackStone" Margin="5"/>
                     <stonebuttonex:cStoneButton Type="WhiteStone" Margin="5"/>

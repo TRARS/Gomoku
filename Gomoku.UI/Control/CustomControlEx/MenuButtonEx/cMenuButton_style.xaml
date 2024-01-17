@@ -123,7 +123,7 @@
                                 Background="Transparent"
                                 CornerRadius="{TemplateBinding BorderCornerRadius}"
                                 Margin="2">
-                            <TextBlock x:Name="contentText" Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <TextBlock x:Name="contentText" Text="{TemplateBinding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                        Foreground="#E9E9E9" Margin="4,0,4,0"
                                        RenderTransformOrigin="0.5,0.5">
                                 <TextBlock.RenderTransform>
@@ -359,7 +359,7 @@
                                 Background="Transparent"
                                 CornerRadius="{TemplateBinding BorderCornerRadius}"
                                 Margin="2">
-                            <TextBlock x:Name="contentText" Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <TextBlock x:Name="contentText" Text="{TemplateBinding Text}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                        Foreground="#E9E9E9" Margin="4,0,4,0"
                                        RenderTransformOrigin="0.5,0.5">
                                 <TextBlock.RenderTransform>
