@@ -439,7 +439,7 @@ namespace Gomoku.SocketUtils.Role
             {
                 ExMessageType = exType,
                 ExMessage = message,
-                ExObject = exObj
+                ExObject = $"{exObj}"
             };
 
             var jsonString = JsonSerialize(new ClientMessage(senderName, "親愛なるそなた", senderMessage, additionalPayload));

@@ -75,7 +75,7 @@
                                                 </Trigger.Setters>
 
                                                 <Trigger.EnterActions>
-                                                    <BeginStoryboard Name="Anm">
+                                                    <BeginStoryboard Name="Anm" >
                                                         <Storyboard>
                                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Effect.HorizontalOffset"
                                                                                            RepeatBehavior="Forever">

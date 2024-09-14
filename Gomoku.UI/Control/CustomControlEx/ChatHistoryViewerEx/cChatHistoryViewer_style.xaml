@@ -439,8 +439,8 @@
                                     VerticalAlignment="Center"
                                     Margin="5,0,0,0">
                                 <TextBlock FontSize="{Binding [3], Source={StaticResource doubleCollection}}">
-                                    <TextBlock Text="{Binding ExPayload.ExObject.ChallengerClientRealName}"
-                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}"
+                                    <TextBlock Text="{Binding ExPayload.MatchObject.ChallengerClientRealName}"
+                                               Foreground="{Binding ExPayload.MatchObject.ChallengerColor}"
                                                FontWeight="Bold">
                                         <TextBlock.Effect>
                                             <DropShadowEffect Color="Gray"
@@ -448,7 +448,7 @@
                                                               BlurRadius="1"/>
                                         </TextBlock.Effect>
                                     </TextBlock> 
-                                    <Run Text="{Binding ExPayload.ExObject.ChallengerMessage}" Foreground="White"/>
+                                    <Run Text="{Binding ExPayload.MatchObject.ChallengerMessage}" Foreground="White"/>
                                 </TextBlock>
                             </Border>
 
@@ -486,7 +486,7 @@
                                     <BeginStoryboard Storyboard="{StaticResource FadeOutAnimation3s}" />
                                 </DataTrigger.EnterActions>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding ExPayload.ExObject.ResponseToChallenge}" Value="True">
+                            <DataTrigger Binding="{Binding ExPayload.MatchObject.ResponseToChallenge}" Value="True">
                                 <Setter Property="Visibility" Value="Collapsed" TargetName="confirmgrid"/>
                             </DataTrigger>
                         </DataTemplate.Triggers>
@@ -504,14 +504,14 @@
                             <Border VerticalAlignment="Center"
                                     Margin="5,0,0,0">
                                 <TextBlock FontSize="{Binding [3], Source={StaticResource doubleCollection}}">
-                                    <TextBlock Text="{Binding ExPayload.ExObject.ChessPoint}"
-                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}">
+                                    <TextBlock Text="{Binding ExPayload.MatchObject.ChessPoint}"
+                                               Foreground="{Binding ExPayload.MatchObject.ChallengerColor}">
                                         <TextBlock.Effect>
                                             <DropShadowEffect Color="Gray"
                                                               ShadowDepth="0"/>
                                         </TextBlock.Effect>
                                     </TextBlock> 
-                                    <Run Text="{Binding ExPayload.ExObject.ChallengerMessage}" Foreground="White"/>
+                                    <Run Text="{Binding ExPayload.MatchObject.ChallengerMessage}" Foreground="White"/>
                                 </TextBlock>
                             </Border>
                         </Grid>
@@ -587,8 +587,8 @@
 
                                     <TextBlock Grid.Column="1" 
                                                FontSize="{Binding [3], Source={StaticResource doubleCollection}}" 
-                                               Text="{Binding ExPayload.ExObject.ChallengerClientRealName}"
-                                               Foreground="{Binding ExPayload.ExObject.ChallengerColor}"
+                                               Text="{Binding ExPayload.MatchObject.ChallengerClientRealName}"
+                                               Foreground="{Binding ExPayload.MatchObject.ChallengerColor}"
                                                FontWeight="Bold">
                                         <TextBlock.Effect>
                                             <DropShadowEffect Color="Gray"
@@ -599,7 +599,7 @@
 
                                     <colorfultextblockex:cColorfulTextBlock Grid.Column="2"
                                                                             FontSize="{Binding [3], Source={StaticResource doubleCollection}}"
-                                                                            Text="{Binding ExPayload.ExObject.ChallengerMessage}"
+                                                                            Text="{Binding ExPayload.MatchObject.ChallengerMessage}"
                                                                             TextHorizontalAlignment="Left">
                                         <UIElement.Visibility>
                                             <Binding Path="Visibility" RelativeSource="{RelativeSource TemplatedParent}"/>

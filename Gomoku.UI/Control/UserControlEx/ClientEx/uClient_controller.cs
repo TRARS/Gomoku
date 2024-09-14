@@ -343,7 +343,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                             // 接收并储存外机发给本机的对战请求消息
                             matchHelper.ChallengeRequest = matchObject;
-                            obj.AdditionalPayload.ExObject = matchObject;
+                            obj.AdditionalPayload.ExObject = matchHelper.JsonSerialize(matchObject);
 
 
                             // 判断是否有人应战
@@ -354,6 +354,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             }
 
                             // 可能需要显示的对战请求消息
+                            obj.AdditionalPayload.MatchObject = matchHelper.JsonDeserialize<MatchObject>(obj.AdditionalPayload.ExObject);
                             chatHistoryVM.GameMessages.Add(new(obj.AdditionalPayload)
                             {
                                 AcceptCommand = new(AcceptMatch),
@@ -370,7 +371,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             if (matchHelper.IsInGameProgress is false) { matchHelper.ChallengeRequest = matchObject; }
 
                             // 接收外机发给本机的对战确认消息
-                            obj.AdditionalPayload.ExObject = matchObject;
+                            obj.AdditionalPayload.ExObject = matchHelper.JsonSerialize(matchObject);
 
                             // 本机发送的消息不需要显示 
                             if (matchObject.ChallengerClientName == chatRoomJoinerVM.ClientName) { break; }
@@ -382,6 +383,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             }
 
                             // 可能需要显示的对战确认消息（IsChallengeRequest = false 时不显示 接受/拒绝 按钮）
+                            obj.AdditionalPayload.MatchObject = matchHelper.JsonDeserialize<MatchObject>(obj.AdditionalPayload.ExObject);
                             chatHistoryVM.GameMessages.Add(new(obj.AdditionalPayload)
                             {
                                 AcceptCommand = new(AcceptMatch),
@@ -431,7 +433,8 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                             // 接收结算消息，先反序列化
                             var matchObject = matchHelper.JsonDeserialize<MatchObject>($"{obj.AdditionalPayload.ExObject}")!;
 
-                            obj.AdditionalPayload.ExObject = matchObject;
+                            obj.AdditionalPayload.ExObject = matchHelper.JsonSerialize(matchObject);
+                            obj.AdditionalPayload.MatchObject = matchHelper.JsonDeserialize<MatchObject>(obj.AdditionalPayload.ExObject);
                             chatHistoryVM.WinnerMessages.Add(new(obj.AdditionalPayload));
 
                             break;
@@ -683,6 +686,11 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             {
                 IsChallengeRequest = true;
             }
+
+            public override string ToString()
+            {
+                return base.ToString();
+            }
         }
 
         /// <summary>
@@ -702,6 +710,10 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
             private MatchHelper() { }
 
+            public string JsonSerialize<T>(T jsonObj)
+            {
+                return JsonSerializer.Serialize(jsonObj, options);
+            }
             public MatchObject? JsonDeserialize<MatchObject>(string jsonText)
             {
                 try
@@ -836,7 +848,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             var exPayload = new AdditionalPayload(chatRoomJoinerVM.ClientColor, chatRoomJoinerVM.ClientAvatarIdx)
             {
                 ExMessageType = ExMessageType.GameInProgress,
-                ExObject = new MatchObject()
+                ExObject = matchHelper.JsonSerialize(new MatchObject()
                 {
                     ChallengerClientName = chatRoomJoinerVM.ClientName,          //带盐
                     ChallengerClientRealName = chatRoomJoinerVM.ClientRealName,  //原始
@@ -847,7 +859,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
 
                     ChessPoint = pt,
                     ChessColor = ChessPieceColor.None
-                }
+                })
             };
             await chatClient.SendMessageToClient(matchHelper.ChallengeRequest.ChallengerClientName, string.Empty, exPayload);
         }
@@ -871,14 +883,14 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                         var exPayload = new AdditionalPayload(chatRoomJoinerVM.ClientColor, chatRoomJoinerVM.ClientAvatarIdx)
                         {
                             ExMessageType = ExMessageType.WinnerAlert,
-                            ExObject = new MatchObject()
+                            ExObject = matchHelper.JsonSerialize(new MatchObject()
                             {
                                 ChallengerClientName = chatRoomJoinerVM.ClientName,          //带盐
                                 ChallengerClientRealName = chatRoomJoinerVM.ClientRealName,  //原始
                                 ChallengerColor = chatRoomJoinerVM.ClientColor,              //颜色
                                 ChallengerMessage = $" {(isWinner ? "杀死了比赛" : "...")}", //文本
                                 ChessColor = ChessPieceColor.Black
-                            }
+                            })
                         };
                         await chatClient.SendMessageToClient(chatRoomJoinerVM.ServerName, string.Empty, exPayload);
                     }
@@ -908,7 +920,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             var exPayload = new AdditionalPayload(chatRoomJoinerVM.ClientColor, chatRoomJoinerVM.ClientAvatarIdx)
             {
                 ExMessageType = ExMessageType.GameMatching,
-                ExObject = new MatchObject()
+                ExObject = matchHelper.JsonSerialize(new MatchObject()
                 {
                     ChallengerClientName = chatRoomJoinerVM.ClientName,          //带盐
                     ChallengerClientRealName = chatRoomJoinerVM.ClientRealName,  //原始
@@ -917,7 +929,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                     ChessColor = color,
                     RequesterClientName = remotePlayerClientName, //对方名字
                     IsChallengeRequest = isChallengeRequest,                                  //应战，非对战请求
-                }
+                })
             };
 
             return exPayload;
@@ -932,7 +944,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
             var exPayload = new AdditionalPayload(chatRoomJoinerVM.ClientColor, chatRoomJoinerVM.ClientAvatarIdx)
             {
                 ExMessageType = ExMessageType.GameConfirm,
-                ExObject = new MatchObject()
+                ExObject = matchHelper.JsonSerialize(new MatchObject()
                 {
                     ChallengerClientName = chatRoomJoinerVM.ClientName,          //带盐
                     ChallengerClientRealName = chatRoomJoinerVM.ClientRealName,  //原始
@@ -942,7 +954,7 @@ namespace Gomoku.UI.Control.UserControlEx.ClientEx
                     RequesterClientName = matchHelper.ChallengeRequest.ChallengerClientName, //对方名字
                     IsChallengeRequest = false,                                  //应战，非对战请求
                     AbortGame = isAbortGame
-                }
+                })
             };
 
             return exPayload;

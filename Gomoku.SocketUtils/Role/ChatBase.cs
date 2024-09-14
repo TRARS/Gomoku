@@ -40,7 +40,6 @@ namespace Gomoku.SocketUtils.Role
     public record ClientInitialAuthentication([property: JsonPropertyName("Name")] string Name,
                                               [property: JsonPropertyName("Age")] string Age);
 
-
     // 发消息，转发消息，收消息，使用通用格式
     public record ClientMessage([property: JsonPropertyName("SenderName")] string SenderName,
                                 [property: JsonPropertyName("ReceiverName")] string ReceiverName,
@@ -63,7 +62,13 @@ namespace Gomoku.SocketUtils.Role
         public string ExMessage { get; set; }
 
         [JsonPropertyName("ExObject")]
-        public object? ExObject { get; set; }
+        public string? ExObject { get; set; }
+
+        /// <summary>
+        /// ExObject类型改为string后，添加一个MatchObject用来临时储存ExObject反序列化后的结果以便UI绑定
+        /// </summary>
+        [JsonIgnore]
+        public object? MatchObject { get; set; }
 
         public AdditionalPayload(string senderColor, int senderAvatarIdx)
         {
@@ -75,6 +80,7 @@ namespace Gomoku.SocketUtils.Role
             ExMessageType = ExMessageType.Chat;
             ExMessage = string.Empty;
             ExObject = null;
+            MatchObject = null;
         }
     }
 
